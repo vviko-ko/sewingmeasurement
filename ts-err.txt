@@ -1,0 +1,6 @@
+﻿src/App.tsx(3,26): error TS6196: 'Piece' is declared but never used.
+src/App.tsx(6,13): error TS1484: 'GarmentProps' is a type and must be imported using a type-only import when 'verbatimModuleSyntax' is enabled.
+src/App.tsx(6,13): error TS6133: 'GarmentProps' is declared but its value is never read.
+src/components/Garments.tsx(70,48): error TS6133: 'c3' is declared but its value is never read.
+src/components/Garments.tsx(154,45): error TS6198: All destructured elements are unused.
+src/components/Garments.tsx(212,50): error TS6133: 'c3' is declared but its value is never read.

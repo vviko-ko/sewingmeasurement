@@ -190,418 +190,195 @@ const GarmentIllustration: FC<{ type: GarmentType; accent: string; bg: string; s
     const h = size === "panel" ? 300 : 220;
     const w = size === "panel" ? 420 : 280;
 
+    // Fashion-flat style realistic paths
     const illustrations: Record<GarmentType, ReactElement> = {
-
         agbada: (
-            <svg viewBox="0 0 280 220" width={w} height={h}>
-                <rect width="280" height="220" fill={bg} />
-                {/* bg grid */}
-                <line x1="140" y1="0" x2="140" y2="220" stroke={accent} strokeWidth=".3" opacity=".15" />
-                <line x1="0" y1="110" x2="280" y2="110" stroke={accent} strokeWidth=".3" opacity=".15" />
-                {/* outer robe */}
-                <path d="M40,50 Q140,30 240,50 L260,200 L20,200Z" fill={accent} opacity=".18" stroke={accent} strokeWidth="1.2" />
-                <path d="M40,50 Q140,30 240,50 L260,200 L20,200Z" fill="none" stroke={accent} strokeWidth="1.5" />
-                {/* embroidery at neck */}
-                <path d="M105,52 Q140,42 175,52" fill="none" stroke={accent} strokeWidth="2" opacity=".8" />
-                {[0, 1, 2, 3, 4].map(i => (
-                    <circle key={i} cx={108 + i * 16} cy={54} r="2.5" fill={accent} opacity=".7" />
-                ))}
-                {/* inner buba */}
-                <path d="M95,55 L185,55 L195,200 L85,200Z" fill={accent} opacity=".25" stroke={accent} strokeWidth="1" />
-                {/* wide sleeves */}
-                <path d="M40,50 L20,120 L85,130 L95,55Z" fill={accent} opacity=".2" stroke={accent} strokeWidth="1" />
-                <path d="M240,50 L260,120 L195,130 L185,55Z" fill={accent} opacity=".2" stroke={accent} strokeWidth="1" />
-                {/* embroidery lines on body */}
-                {[0, 1, 2].map(i => (
-                    <path key={i} d={`M120,${80 + i * 30} Q140,${75 + i * 30} 160,${80 + i * 30}`} fill="none" stroke={accent} strokeWidth="1.2" opacity=".5" />
-                ))}
-                {/* cap */}
-                <ellipse cx="140" cy="40" rx="22" ry="12" fill={accent} opacity=".35" stroke={accent} strokeWidth="1" />
-                <path d="M118,40 Q140,28 162,40" fill={accent} opacity=".5" stroke={accent} strokeWidth="1" />
-                {/* label */}
-                <text x="140" y="215" textAnchor="middle" fontFamily="DM Mono" fontSize="7" fill={accent} opacity=".5" letterSpacing="3">AGBADA</text>
+            <svg viewBox="0 0 280 220" width={w} height={h} xmlns="http://www.w3.org/2000/svg">
+                <rect width="280" height="220" fill="var(--card)" />
+                <path d="M 140 35 C 130 35 125 45 125 45 C 110 50 100 55 50 60 L 30 180 L 250 180 L 230 60 C 180 55 170 50 155 45 C 155 45 150 35 140 35 Z" fill={accent} opacity="0.1" stroke={accent} strokeWidth="1.5" strokeLinejoin="round"/>
+                <path d="M 125 45 C 130 55 150 55 155 45" fill="none" stroke={accent} strokeWidth="2" strokeLinecap="round"/>
+                <path d="M 115 65 C 120 75 160 75 165 65 L 140 95 Z" fill="none" stroke={accent} strokeWidth="1.5" strokeLinejoin="round"/>
+                <line x1="140" y1="95" x2="140" y2="150" stroke={accent} strokeWidth="1"/>
+                <path d="M 80 65 L 80 160 M 200 65 L 200 160" stroke={accent} strokeWidth="0.8" strokeDasharray="3,3"/>
+                <path d="M 100 30 C 120 20 160 20 180 30" fill="none" stroke={accent} strokeWidth="2" opacity="0.5"/>
             </svg>
         ),
-
         senator: (
-            <svg viewBox="0 0 280 220" width={w} height={h}>
-                <rect width="280" height="220" fill={bg} />
-                <line x1="140" y1="0" x2="140" y2="220" stroke={accent} strokeWidth=".3" opacity=".15" />
-                {/* long senator top */}
-                <path d="M95,45 L185,45 L195,185 L85,185Z" fill={accent} opacity=".2" stroke={accent} strokeWidth="1.5" />
-                {/* collar stand */}
-                <path d="M118,45 Q140,38 162,45 L158,58 Q140,50 122,58Z" fill={accent} opacity=".45" stroke={accent} strokeWidth="1" />
-                {/* CF embroidery band */}
-                <line x1="140" y1="58" x2="140" y2="130" stroke={accent} strokeWidth="2" opacity=".6" />
-                {[0, 1, 2, 3, 4, 5, 6].map(i => (
-                    <path key={i} d={`M134,${65 + i * 10} Q140,${62 + i * 10} 146,${65 + i * 10}`} fill="none" stroke={accent} strokeWidth="1.2" opacity=".55" />
-                ))}
-                {/* long sleeves */}
-                <path d="M95,45 L65,50 L60,155 L85,150 L85,185" fill="none" stroke={accent} strokeWidth="1.2" opacity=".7" />
-                <path d="M185,45 L215,50 L220,155 L195,150 L195,185" fill="none" stroke={accent} strokeWidth="1.2" opacity=".7" />
-                {/* trousers */}
-                <path d="M100,185 L85,215 L120,215 L140,195 L160,215 L195,215 L180,185Z" fill={accent} opacity=".18" stroke={accent} strokeWidth="1.2" />
-                {/* buttons on CF */}
-                {[0, 1, 2].map(i => (
-                    <circle key={i} cx="140" cy={138 + i * 10} r="2" fill={accent} opacity=".8" />
-                ))}
-                <text x="140" y="215" textAnchor="middle" fontFamily="DM Mono" fontSize="7" fill={accent} opacity=".5" letterSpacing="3">SENATOR</text>
+            <svg viewBox="0 0 280 220" width={w} height={h} xmlns="http://www.w3.org/2000/svg">
+                <rect width="280" height="220" fill="var(--card)" />
+                <path d="M 125 40 L 155 40 L 160 45 L 195 55 L 205 130 L 190 135 L 185 100 L 180 185 L 100 185 L 95 100 L 90 135 L 75 130 L 85 55 L 120 45 Z" fill={accent} opacity="0.1" stroke={accent} strokeWidth="1.5" strokeLinejoin="round"/>
+                <rect x="135" y="45" width="10" height="70" fill={accent} opacity="0.2" stroke={accent} strokeWidth="0.5"/>
+                <circle cx="140" cy="55" r="1.5" fill={accent}/><circle cx="140" cy="70" r="1.5" fill={accent}/><circle cx="140" cy="85" r="1.5" fill={accent}/>
+                <path d="M 125 40 C 135 48 145 48 155 40" fill="none" stroke={accent} strokeWidth="1.5"/>
+                <line x1="100" y1="185" x2="100" y2="210" stroke={accent} strokeWidth="1.5"/><line x1="180" y1="185" x2="180" y2="210" stroke={accent} strokeWidth="1.5"/>
+                <line x1="140" y1="185" x2="140" y2="210" stroke={accent} strokeWidth="1.5"/>
+                <line x1="105" y1="210" x2="135" y2="210" stroke={accent} strokeWidth="1.5"/><line x1="145" y1="210" x2="175" y2="210" stroke={accent} strokeWidth="1.5"/>
             </svg>
         ),
-
         dashiki: (
-            <svg viewBox="0 0 280 220" width={w} height={h}>
-                <rect width="280" height="220" fill={bg} />
-                {/* colorful background pattern */}
-                {[0, 1, 2, 3, 4].map(i => (
-                    <rect key={i} x={20 + i * 48} y="0" width="44" height="220" fill={accent} opacity={i % 2 === 0 ? ".04" : ".02"} />
-                ))}
-                {/* dashiki body */}
-                <path d="M80,48 L200,48 L210,185 L70,185Z" fill={accent} opacity=".2" stroke={accent} strokeWidth="1.5" />
-                {/* V-neck */}
-                <path d="M120,48 L140,75 L160,48" fill="none" stroke={accent} strokeWidth="2" />
-                {/* yoke embroidery band */}
-                <path d="M80,48 L200,48 L200,80 L80,80Z" fill={accent} opacity=".3" />
-                {/* geometric yoke pattern */}
-                {[0, 1, 2, 3, 4, 5, 6, 7].map(i => (
-                    <path key={i} d={`M${85 + i * 16},50 L${93 + i * 16},58 L${85 + i * 16},66 L${77 + i * 16},58Z`} fill="none" stroke={accent} strokeWidth="1" opacity=".6" />
-                ))}
-                {/* short sleeves */}
-                <path d="M80,48 L45,58 L48,100 L80,95" fill={accent} opacity=".2" stroke={accent} strokeWidth="1.2" />
-                <path d="M200,48 L235,58 L232,100 L200,95" fill={accent} opacity=".2" stroke={accent} strokeWidth="1.2" />
-                {/* hem detail */}
-                <path d="M70,185 L210,185" stroke={accent} strokeWidth="1.5" strokeDasharray="4,3" />
-                <text x="140" y="215" textAnchor="middle" fontFamily="DM Mono" fontSize="7" fill={accent} opacity=".5" letterSpacing="3">DASHIKI</text>
+            <svg viewBox="0 0 280 220" width={w} height={h} xmlns="http://www.w3.org/2000/svg">
+                <rect width="280" height="220" fill="var(--card)" />
+                <path d="M 125 50 L 155 50 L 175 55 L 210 65 L 205 100 L 180 95 L 185 185 L 95 185 L 100 95 L 75 100 L 70 65 L 105 55 Z" fill={accent} opacity="0.15" stroke={accent} strokeWidth="1.5" strokeLinejoin="round"/>
+                <path d="M 125 50 L 140 80 L 155 50" fill="none" stroke={accent} strokeWidth="2.5" strokeLinejoin="round"/>
+                <rect x="115" y="55" width="50" height="40" fill="none" stroke={accent} strokeWidth="1" strokeDasharray="2,2"/>
+                <path d="M 120 60 L 130 60 M 150 60 L 160 60 M 120 65 L 130 65 M 150 65 L 160 65" stroke={accent} strokeWidth="1"/>
+                <line x1="95" y1="175" x2="185" y2="175" stroke={accent} strokeWidth="1" strokeDasharray="4,2"/>
+                <line x1="95" y1="165" x2="185" y2="165" stroke={accent} strokeWidth="1"/>
             </svg>
         ),
-
         boubou: (
-            <svg viewBox="0 0 280 220" width={w} height={h}>
-                <rect width="280" height="220" fill={bg} />
-                {/* massive flowing robe */}
-                <path d="M30,42 Q140,22 250,42 L265,205 L15,205Z" fill={accent} opacity=".18" stroke={accent} strokeWidth="1.5" />
-                {/* voluminous sleeves implied by width */}
-                <path d="M30,42 Q10,80 15,150 L30,205" fill="none" stroke={accent} strokeWidth="1.2" opacity=".5" />
-                <path d="M250,42 Q270,80 265,150 L250,205" fill="none" stroke={accent} strokeWidth="1.2" opacity=".5" />
-                {/* neck opening with embroidery */}
-                <ellipse cx="140" cy="55" rx="32" ry="16" fill={bg} stroke={accent} strokeWidth="2" />
-                {/* neck embroidery */}
-                {[0, 1, 2, 3, 4, 5].map(i => (
-                    <path key={i} d={`M${110 + i * 12},46 Q${116 + i * 12},55 ${110 + i * 12},64`} fill="none" stroke={accent} strokeWidth="1.5" opacity=".6" />
-                ))}
-                {/* chest embroidery panel */}
-                <path d="M108,72 Q140,65 172,72 L168,120 Q140,128 112,120Z" fill={accent} opacity=".2" stroke={accent} strokeWidth="1" />
-                {/* decorative embroidery inside panel */}
-                {[0, 1, 2].map(i => (
-                    <path key={i} d={`M118,${80 + i * 12} Q140,${76 + i * 12} 162,${80 + i * 12}`} fill="none" stroke={accent} strokeWidth="1.2" opacity=".55" />
-                ))}
-                {/* hem border */}
-                <path d="M15,200 L265,200" stroke={accent} strokeWidth="2" opacity=".4" />
-                <path d="M15,205 L265,205" stroke={accent} strokeWidth="1" opacity=".3" strokeDasharray="5,4" />
-                <text x="140" y="218" textAnchor="middle" fontFamily="DM Mono" fontSize="7" fill={accent} opacity=".5" letterSpacing="3">GRAND BOUBOU</text>
+            <svg viewBox="0 0 280 220" width={w} height={h} xmlns="http://www.w3.org/2000/svg">
+                <rect width="280" height="220" fill="var(--card)" />
+                <path d="M 130 40 C 140 45 140 45 150 40 L 260 50 Q 255 100 240 190 L 40 190 Q 25 100 20 50 Z" fill={accent} opacity="0.1" stroke={accent} strokeWidth="1.5" strokeLinejoin="round"/>
+                <path d="M 125 40 C 135 65 145 65 155 40" fill="none" stroke={accent} strokeWidth="2"/>
+                <path d="M 115 50 C 115 90 140 120 165 50" fill="none" stroke={accent} strokeWidth="1" opacity="0.6"/>
+                <circle cx="140" cy="80" r="15" fill="none" stroke={accent} strokeWidth="1" strokeDasharray="2,2"/>
+                <path d="M 135 75 L 145 75 M 135 85 L 145 85" stroke={accent} strokeWidth="1"/>
+                <line x1="40" y1="180" x2="240" y2="180" stroke={accent} strokeWidth="1" strokeDasharray="5,3"/>
+                <path d="M 90 60 Q 95 120 90 190 M 190 60 Q 185 120 190 190" fill="none" stroke={accent} strokeWidth="0.8" opacity="0.5"/>
             </svg>
         ),
-
         kente: (
-            <svg viewBox="0 0 280 220" width={w} height={h}>
-                <rect width="280" height="220" fill={bg} />
-                {/* kente strip pattern background */}
-                {[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12].map(i => (
-                    <rect key={i} x={0} y={i * 17} width="280" height="8" fill={["#D4A017", "#B22222", "#2D6A4F", "#1A1A1A"][i % 4]} opacity=".18" />
-                ))}
-                {/* top/kaba bodice */}
-                <path d="M85,40 L195,40 L200,120 L80,120Z" fill="none" stroke={accent} strokeWidth="2" />
-                {/* kente strips on bodice */}
-                {[0, 1, 2, 3, 4, 5, 6].map(i => (
-                    <line key={i} x1="85" y1={40 + i * 12} x2="195" y2={40 + i * 12} stroke={["#D4A017", "#B22222", "#2D6A4F"][i % 3]} strokeWidth="8" opacity=".35" />
-                ))}
-                {/* neckline */}
-                <path d="M115,40 Q140,32 165,40" fill="none" stroke={accent} strokeWidth="2" />
-                {/* short sleeves */}
-                <path d="M85,40 L55,50 L58,85 L80,80" fill="none" stroke={accent} strokeWidth="1.5" />
-                <path d="M195,40 L225,50 L222,85 L200,80" fill="none" stroke={accent} strokeWidth="1.5" />
-                {/* slit skirt */}
-                <path d="M80,120 L70,205 L140,205 L140,120" fill="none" stroke={accent} strokeWidth="1.5" />
-                <path d="M200,120 L210,205 L140,205" fill="none" stroke={accent} strokeWidth="1.5" />
-                {/* kente on skirt */}
-                {[0, 1, 2, 3, 4, 5].map(i => (
-                    <line key={i} x1="70" y1={130 + i * 13} x2="210" y2="130+i*13" stroke={["#D4A017", "#B22222", "#2D6A4F"][i % 3]} strokeWidth="8" opacity=".28" />
-                ))}
-                <text x="140" y="218" textAnchor="middle" fontFamily="DM Mono" fontSize="7" fill={accent} opacity=".5" letterSpacing="3">KENTE KABA</text>
+            <svg viewBox="0 0 280 220" width={w} height={h} xmlns="http://www.w3.org/2000/svg">
+                <rect width="280" height="220" fill="var(--card)" />
+                <path d="M 120 45 C 130 55 150 55 160 45 L 180 50 L 195 55 L 190 85 L 170 80 L 175 120 L 105 120 L 110 80 L 90 85 L 85 55 L 100 50 Z" fill={accent} opacity="0.15" stroke={accent} strokeWidth="1.5" strokeLinejoin="round"/>
+                <path d="M 100 125 L 180 125 L 190 200 L 140 200 L 140 125 L 90 200 Z" fill={accent} opacity="0.1" stroke={accent} strokeWidth="1.5" strokeLinejoin="round"/>
+                <line x1="120" y1="45" x2="160" y2="45" stroke={accent} strokeWidth="1" opacity="0.5"/>
+                <path d="M 115 60 L 165 60 M 110 75 L 170 75 M 110 90 L 170 90 M 110 105 L 170 105" stroke={accent} strokeWidth="2" opacity="0.4"/>
+                <path d="M 105 140 L 175 140 M 100 160 L 185 160 M 95 180 L 175 180" stroke={accent} strokeWidth="2" opacity="0.4"/>
             </svg>
         ),
-
         adire: (
-            <svg viewBox="0 0 280 220" width={w} height={h}>
-                <rect width="280" height="220" fill={bg} />
-                {/* indigo adire pattern - resist dye circles */}
-                {[0, 1, 2, 3, 4, 5, 6, 7, 8].map(row => (
-                    [0, 1, 2, 3, 4].map(col => (
-                        <circle key={`${row}-${col}`}
-                            cx={30 + col * 50 + (row % 2) * 25} cy={20 + row * 22}
-                            r="8" fill="none" stroke={accent} strokeWidth="1" opacity=".2" />
-                    ))
-                ))}
-                {/* dress silhouette */}
-                <path d="M88,38 L192,38 L205,205 L75,205Z" fill={accent} opacity=".18" stroke={accent} strokeWidth="1.5" />
-                {/* adire pattern on dress */}
-                {[0, 1, 2, 3, 4, 5, 6].map(row => (
-                    [0, 1, 2].map(col => (
-                        <circle key={`d${row}-${col}`}
-                            cx={105 + col * 35} cy={60 + row * 22}
-                            r="6" fill="none" stroke={accent} strokeWidth="1" opacity=".4" />
-                    ))
-                ))}
-                {/* scoop neck */}
-                <path d="M113,38 Q140,50 167,38" fill="none" stroke={accent} strokeWidth="2" />
-                {/* short sleeves */}
-                <path d="M88,38 L55,48 L58,80 L88,75" fill={accent} opacity=".18" stroke={accent} strokeWidth="1.2" />
-                <path d="M192,38 L225,48 L222,80 L192,75" fill={accent} opacity=".18" stroke={accent} strokeWidth="1.2" />
-                {/* waistline */}
-                <path d="M80,105 Q140,98 200,105" fill="none" stroke={accent} strokeWidth="1" strokeDasharray="4,3" opacity=".5" />
-                <text x="140" y="218" textAnchor="middle" fontFamily="DM Mono" fontSize="7" fill={accent} opacity=".5" letterSpacing="3">ADIRE</text>
+            <svg viewBox="0 0 280 220" width={w} height={h} xmlns="http://www.w3.org/2000/svg">
+                <rect width="280" height="220" fill="var(--card)" />
+                <path d="M 115 45 C 130 55 150 55 165 45 L 185 50 L 200 55 L 195 85 L 175 80 L 185 190 L 95 190 L 105 80 L 85 85 L 80 55 L 95 50 Z" fill={accent} opacity="0.15" stroke={accent} strokeWidth="1.5" strokeLinejoin="round"/>
+                <g fill="none" stroke={accent} strokeWidth="1" opacity="0.4">
+                    <circle cx="140" cy="70" r="10"/><circle cx="140" cy="70" r="5"/>
+                    <circle cx="115" cy="110" r="8"/><circle cx="115" cy="110" r="3"/>
+                    <circle cx="165" cy="110" r="8"/><circle cx="165" cy="110" r="3"/>
+                    <circle cx="140" cy="145" r="12"/><circle cx="140" cy="145" r="6"/>
+                    <circle cx="120" cy="175" r="7"/><circle cx="160" cy="175" r="7"/>
+                </g>
+                <path d="M 115 45 C 130 55 150 55 165 45" fill="none" stroke={accent} strokeWidth="2"/>
             </svg>
         ),
         gele: (
-            <svg viewBox="0 0 280 220" width={w} height={h}>
-                <rect width="280" height="220" fill={bg} />
-                {/* gele headtie - dramatic sculptural shape */}
-                <path d="M80,18 Q140,2 200,18 Q225,30 218,52 Q200,48 140,50 Q80,48 62,52 Q55,30 80,18Z" fill={accent} opacity=".35" stroke={accent} strokeWidth="1.5" />
-                {/* gele folds */}
-                <path d="M90,18 Q120,10 150,14 Q175,18 200,18" fill="none" stroke={accent} strokeWidth="1" opacity=".6" />
-                <path d="M62,52 Q80,45 140,46 Q200,45 218,52" fill="none" stroke={accent} strokeWidth="1" opacity=".5" />
-                {/* iro wrapper - wide rectangle */}
-                <path d="M55,55 L225,55 L218,175 L62,175Z" fill={accent} opacity=".2" stroke={accent} strokeWidth="1.5" />
-                {/* buba blouse overlap */}
-                <path d="M88,55 L192,55 L188,130 L92,130Z" fill={accent} opacity=".28" stroke={accent} strokeWidth="1.2" />
-                {/* ipele shoulder cloth */}
-                <path d="M70,60 L130,60 L115,120 L55,120Z" fill={accent} opacity=".2" stroke={accent} strokeWidth="1" strokeDasharray="4,3" />
-                {/* buba embroidery at neck */}
-                {[0, 1, 2, 3].map(i => (
-                    <path key={i} d={`M108,${58 + i * 8} Q140,${55 + i * 8} 172,${58 + i * 8}`} fill="none" stroke={accent} strokeWidth="1" opacity=".5" />
-                ))}
-                {/* wrapper overlap line */}
-                <line x1="140" y1="55" x2="140" y2="175" stroke={accent} strokeWidth="1" strokeDasharray="3,2" opacity=".4" />
-                {/* aso-oke bottom */}
-                <path d="M62,175 L218,175 L215,205 L65,205Z" fill={accent} opacity=".12" stroke={accent} strokeWidth="1" />
-                <text x="140" y="218" textAnchor="middle" fontFamily="DM Mono" fontSize="7" fill={accent} opacity=".5" letterSpacing="3">GELE SET</text>
+            <svg viewBox="0 0 280 220" width={w} height={h} xmlns="http://www.w3.org/2000/svg">
+                <rect width="280" height="220" fill="var(--card)" />
+                {/* Gele Headtie */}
+                <path d="M 100 40 C 110 20 170 20 180 40 C 210 30 220 50 190 60 C 170 65 110 65 90 60 C 60 50 70 30 100 40 Z" fill={accent} opacity="0.25" stroke={accent} strokeWidth="1.5" strokeLinejoin="round"/>
+                <path d="M 110 45 C 130 35 150 35 170 45 M 105 55 C 130 45 150 45 175 55" fill="none" stroke={accent} strokeWidth="1" opacity="0.7"/>
+                {/* Buba Blouse */}
+                <path d="M 120 70 C 130 80 150 80 160 70 L 180 75 L 200 80 L 195 110 L 175 105 L 170 140 L 110 140 L 105 105 L 85 110 L 80 80 L 100 75 Z" fill={accent} opacity="0.1" stroke={accent} strokeWidth="1.5" strokeLinejoin="round"/>
+                {/* Iro Wrapper */}
+                <path d="M 105 130 L 180 130 L 170 200 L 95 200 Z" fill={accent} opacity="0.15" stroke={accent} strokeWidth="1.5" strokeLinejoin="round"/>
+                <line x1="140" y1="130" x2="135" y2="200" stroke={accent} strokeWidth="1" strokeDasharray="3,3"/>
+                {/* Ipele Shoulder Sash */}
+                <path d="M 165 75 L 150 75 L 130 160 L 145 160 Z" fill={accent} opacity="0.2" stroke={accent} strokeWidth="1"/>
             </svg>
         ),
-
         kaftan: (
-            <svg viewBox="0 0 280 220" width={w} height={h}>
-                <rect width="280" height="220" fill={bg} />
-                {/* velvet texture suggestion */}
-                {[0, 1, 2, 3, 4, 5, 6, 7, 8, 9].map(i => (
-                    <line key={i} x1={i * 30} y1="0" x2={i * 30} y2="220" stroke={accent} strokeWidth=".3" opacity=".08" />
-                ))}
-                {/* long kaftan body */}
-                <path d="M82,35 L198,35 L210,205 L70,205Z" fill={accent} opacity=".2" stroke={accent} strokeWidth="1.5" />
-                {/* center front sfifa braid */}
-                <line x1="140" y1="48" x2="140" y2="205" stroke={accent} strokeWidth="3" opacity=".5" />
-                <line x1="138" y1="48" x2="138" y2="205" stroke={accent} strokeWidth="1" opacity=".8" />
-                <line x1="142" y1="48" x2="142" y2="205" stroke={accent} strokeWidth="1" opacity=".8" />
-                {/* aakad clasp loops */}
-                {[0, 1, 2, 3, 4].map(i => (
-                    <path key={i} d={`M134,${62 + i * 22} Q128,${68 + i * 22} 134,${74 + i * 22}`} fill="none" stroke={accent} strokeWidth="1.5" opacity=".7" />
-                ))}
-                {/* elaborate round neckline */}
-                <ellipse cx="140" cy="48" rx="30" ry="14" fill="none" stroke={accent} strokeWidth="2" />
-                {/* sfifa braid at neckline */}
-                <ellipse cx="140" cy="48" rx="34" ry="18" fill="none" stroke={accent} strokeWidth="1" opacity=".5" strokeDasharray="3,2" />
-                {/* bell sleeves */}
-                <path d="M82,35 L42,40 L30,140 L82,145" fill={accent} opacity=".18" stroke={accent} strokeWidth="1.2" />
-                <path d="M198,35 L238,40 L250,140 L198,145" fill={accent} opacity=".18" stroke={accent} strokeWidth="1.2" />
-                {/* sfifa at cuffs */}
-                <line x1="30" y1="136" x2="82" y2="142" stroke={accent} strokeWidth="2" opacity=".6" />
-                <line x1="198" y1="142" x2="250" y2="136" stroke={accent} strokeWidth="2" opacity=".6" />
-                {/* hem sfifa */}
-                <line x1="70" y1="202" x2="210" y2="202" stroke={accent} strokeWidth="2.5" opacity=".5" />
-                <text x="140" y="218" textAnchor="middle" fontFamily="DM Mono" fontSize="7" fill={accent} opacity=".5" letterSpacing="3">MOROCCAN KAFTAN</text>
+            <svg viewBox="0 0 280 220" width={w} height={h} xmlns="http://www.w3.org/2000/svg">
+                <rect width="280" height="220" fill="var(--card)" />
+                <path d="M 125 40 C 135 50 145 50 155 40 L 175 45 L 210 55 L 220 140 L 195 135 L 210 200 L 70 200 L 85 135 L 60 140 L 70 55 L 105 45 Z" fill={accent} opacity="0.1" stroke={accent} strokeWidth="1.5" strokeLinejoin="round"/>
+                <line x1="140" y1="50" x2="140" y2="200" stroke={accent} strokeWidth="3" opacity="0.6"/>
+                <line x1="140" y1="50" x2="140" y2="200" stroke={bg} strokeWidth="1"/>
+                <path d="M 125 40 C 135 55 145 55 155 40" fill="none" stroke={accent} strokeWidth="2"/>
+                <path d="M 115 45 C 135 70 145 70 165 45" fill="none" stroke={accent} strokeWidth="1" opacity="0.5"/>
+                <line x1="65" y1="135" x2="85" y2="130" stroke={accent} strokeWidth="2"/><line x1="215" y1="135" x2="195" y2="130" stroke={accent} strokeWidth="2"/>
+                <line x1="75" y1="195" x2="205" y2="195" stroke={accent} strokeWidth="2"/>
             </svg>
         ),
-
         isiagu: (
-            <svg viewBox="0 0 280 220" width={w} height={h}>
-                <rect width="280" height="220" fill={bg} />
-                {/* isiagu lion print pattern background */}
-                {[0, 1, 2, 3, 4, 5, 6].map(row => (
-                    [0, 1, 2, 3].map(col => (
-                        <g key={`${row}-${col}`} transform={`translate(${18 + col * 62},${18 + row * 28})`}>
-                            <ellipse cx="0" cy="0" rx="12" ry="8" fill="none" stroke={accent} strokeWidth=".8" opacity=".2" />
-                            <line x1="-8" y1="0" x2="8" y2="0" stroke={accent} strokeWidth=".5" opacity=".15" />
-                            <line x1="0" y1="-6" x2="0" y2="6" stroke={accent} strokeWidth=".5" opacity=".15" />
-                        </g>
-                    ))
-                ))}
-                {/* isiagu top body */}
-                <path d="M90,40 L190,40 L195,180 L85,180Z" fill={accent} opacity=".2" stroke={accent} strokeWidth="1.5" />
-                {/* button placket CF */}
-                <line x1="140" y1="50" x2="140" y2="180" stroke={accent} strokeWidth="1" strokeDasharray="3,2" opacity=".5" />
-                {[0, 1, 2, 3, 4].map(i => (
-                    <circle key={i} cx="140" cy={60 + i * 22} r="3" fill={accent} opacity=".7" />
-                ))}
-                {/* mandarin collar */}
-                <path d="M115,40 L125,32 L155,32 L165,40 L165,50 Q140,44 115,50Z" fill={accent} opacity=".4" stroke={accent} strokeWidth="1.2" />
-                {/* long sleeves */}
-                <path d="M90,40 L55,48 L50,155 L85,160 L85,180" fill="none" stroke={accent} strokeWidth="1.2" opacity=".7" />
-                <path d="M190,40 L225,48 L230,155 L195,160 L195,180" fill="none" stroke={accent} strokeWidth="1.2" opacity=".7" />
-                {/* gold aguba cuff braids */}
-                <line x1="50" y1="152" x2="85" y2="157" stroke="#D4A017" strokeWidth="2.5" opacity=".7" />
-                <line x1="195" y1="157" x2="230" y2="152" stroke="#D4A017" strokeWidth="2.5" opacity=".7" />
-                <text x="140" y="215" textAnchor="middle" fontFamily="DM Mono" fontSize="7" fill={accent} opacity=".5" letterSpacing="3">ISIAGU</text>
+            <svg viewBox="0 0 280 220" width={w} height={h} xmlns="http://www.w3.org/2000/svg">
+                <rect width="280" height="220" fill="var(--card)" />
+                <path d="M 120 40 L 160 40 L 175 45 L 210 55 L 205 130 L 180 125 L 185 180 L 95 180 L 100 125 L 75 130 L 70 55 L 105 45 Z" fill={accent} opacity="0.12" stroke={accent} strokeWidth="1.5" strokeLinejoin="round"/>
+                <line x1="140" y1="45" x2="140" y2="130" stroke={accent} strokeWidth="1.5" strokeDasharray="4,2"/>
+                <circle cx="140" cy="65" r="2" fill={accent}/><circle cx="140" cy="85" r="2" fill={accent}/><circle cx="140" cy="105" r="2" fill={accent}/>
+                <path d="M 120 40 L 160 40 L 165 35 L 115 35 Z" fill={accent} opacity="0.3" stroke={accent} strokeWidth="1"/>
+                <path d="M 100 80 C 110 70 120 70 120 80 M 160 80 C 170 70 180 70 180 80" fill="none" stroke={accent} strokeWidth="1" opacity="0.5"/>
+                <path d="M 100 120 C 110 110 120 110 120 120 M 160 120 C 170 110 180 110 180 120" fill="none" stroke={accent} strokeWidth="1" opacity="0.5"/>
+                <path d="M 100 160 C 110 150 120 150 120 160 M 160 160 C 170 150 180 150 180 160" fill="none" stroke={accent} strokeWidth="1" opacity="0.5"/>
             </svg>
         ),
-
         wrapper: (
-            <svg viewBox="0 0 280 220" width={w} height={h}>
-                <rect width="280" height="220" fill={bg} />
-                {/* ankara wax print pattern */}
-                {[0, 1, 2, 3, 4, 5].map(row => (
-                    [0, 1, 2, 3, 4].map(col => (
-                        <g key={`${row}-${col}`} transform={`translate(${20 + col * 52},${15 + row * 35})`}>
-                            <circle cx="0" cy="0" r="9" fill="none" stroke={accent} strokeWidth="1" opacity=".2" />
-                            <circle cx="0" cy="0" r="5" fill={accent} opacity=".12" />
-                        </g>
-                    ))
-                ))}
-                {/* peplum top */}
-                <path d="M88,35 L192,35 L198,118 L82,118Z" fill={accent} opacity=".22" stroke={accent} strokeWidth="1.5" />
-                {/* peplum flare */}
-                <path d="M75,118 L82,118 L80,140 L65,145Z" fill={accent} opacity=".2" stroke={accent} strokeWidth="1" />
-                <path d="M198,118 L205,118 L215,140 L200,145Z" fill={accent} opacity=".2" stroke={accent} strokeWidth="1" />
-                <path d="M82,118 L198,118 L205,140 L75,140Z" fill={accent} opacity=".2" stroke={accent} strokeWidth="1.2" />
-                {/* scoop neck */}
-                <path d="M112,35 Q140,46 168,35" fill="none" stroke={accent} strokeWidth="2" />
-                {/* wrapper skirt */}
-                <path d="M72,145 L208,145 L215,205 L65,205Z" fill={accent} opacity=".18" stroke={accent} strokeWidth="1.5" />
-                {/* wrapper overlap */}
-                <line x1="140" y1="145" x2="132" y2="205" stroke={accent} strokeWidth="1" strokeDasharray="3,2" opacity=".5" />
-                {/* waistband */}
-                <path d="M72,145 L208,145 L210,155 L70,155Z" fill={accent} opacity=".35" stroke={accent} strokeWidth="1" />
-                <text x="140" y="218" textAnchor="middle" fontFamily="DM Mono" fontSize="7" fill={accent} opacity=".5" letterSpacing="3">ANKARA SET</text>
+            <svg viewBox="0 0 280 220" width={w} height={h} xmlns="http://www.w3.org/2000/svg">
+                <rect width="280" height="220" fill="var(--card)" />
+                <path d="M 115 45 C 130 55 150 55 165 45 L 185 50 L 180 110 L 200 135 L 165 130 L 115 130 L 80 135 L 100 110 L 95 50 Z" fill={accent} opacity="0.15" stroke={accent} strokeWidth="1.5" strokeLinejoin="round"/>
+                <path d="M 115 45 C 130 55 150 55 165 45" fill="none" stroke={accent} strokeWidth="2.5"/>
+                <path d="M 105 130 L 180 130 L 190 200 L 90 200 Z" fill={accent} opacity="0.1" stroke={accent} strokeWidth="1.5" strokeLinejoin="round"/>
+                <line x1="140" y1="130" x2="135" y2="200" stroke={accent} strokeWidth="1" strokeDasharray="2,2"/>
+                <g fill="none" stroke={accent} strokeWidth="0.8" opacity="0.3">
+                    <circle cx="110" cy="70" r="4"/><circle cx="140" cy="80" r="4"/><circle cx="170" cy="70" r="4"/>
+                    <circle cx="120" cy="150" r="4"/><circle cx="160" cy="150" r="4"/><circle cx="140" cy="175" r="4"/>
+                </g>
+                <path d="M 115 110 C 130 115 150 115 165 110" fill="none" stroke={accent} strokeWidth="1" strokeDasharray="3,3"/>
             </svg>
         ),
-
         adress: (
-            <svg viewBox="0 0 280 220" width={w} height={h}>
-                <rect width="280" height="220" fill={bg} />
-                <line x1="140" y1="0" x2="140" y2="220" stroke={accent} strokeWidth=".3" opacity=".12" />
-                {/* fitted bodice */}
-                <path d="M100,38 L180,38 L185,115 L95,115Z" fill={accent} opacity=".22" stroke={accent} strokeWidth="1.5" />
-                {/* flared A-line skirt */}
-                <path d="M95,115 L50,205 L230,205 L185,115Z" fill={accent} opacity=".18" stroke={accent} strokeWidth="1.5" />
-                {/* scoop neckline */}
-                <path d="M113,38 Q140,50 167,38" fill="none" stroke={accent} strokeWidth="2" />
-                {/* shoulder straps / sleeveless */}
-                <path d="M100,38 L96,28 L115,28 L115,38" fill={accent} opacity=".25" stroke={accent} strokeWidth="1" />
-                <path d="M180,38 L184,28 L165,28 L165,38" fill={accent} opacity=".25" stroke={accent} strokeWidth="1" />
-                {/* waist seam */}
-                <path d="M95,115 Q140,108 185,115" fill="none" stroke={accent} strokeWidth="1.5" />
-                {/* dart lines */}
-                <line x1="120" y1="50" x2="125" y2="95" stroke={accent} strokeWidth=".8" strokeDasharray="3,2" opacity=".5" />
-                <line x1="160" y1="50" x2="155" y2="95" stroke={accent} strokeWidth=".8" strokeDasharray="3,2" opacity=".5" />
-                {/* skirt godets / A flare lines */}
-                <line x1="140" y1="115" x2="140" y2="205" stroke={accent} strokeWidth=".8" strokeDasharray="4,3" opacity=".35" />
-                <line x1="140" y1="115" x2="95" y2="205" stroke={accent} strokeWidth=".8" strokeDasharray="4,3" opacity=".3" />
-                <line x1="140" y1="115" x2="185" y2="205" stroke={accent} strokeWidth=".8" strokeDasharray="4,3" opacity=".3" />
-                {/* hem */}
-                <line x1="50" y1="205" x2="230" y2="205" stroke={accent} strokeWidth="2" opacity=".5" />
-                <text x="140" y="218" textAnchor="middle" fontFamily="DM Mono" fontSize="7" fill={accent} opacity=".5" letterSpacing="3">A-LINE DRESS</text>
+            <svg viewBox="0 0 280 220" width={w} height={h} xmlns="http://www.w3.org/2000/svg">
+                <rect width="280" height="220" fill="var(--card)" />
+                <path d="M 120 40 C 130 55 150 55 160 40 L 175 45 L 165 110 L 210 200 L 70 200 L 115 110 L 105 45 Z" fill={accent} opacity="0.12" stroke={accent} strokeWidth="1.5" strokeLinejoin="round"/>
+                <path d="M 120 40 C 130 55 150 55 160 40" fill="none" stroke={accent} strokeWidth="2"/>
+                <path d="M 110 40 L 115 30 L 125 30 M 170 40 L 165 30 L 155 30" fill="none" stroke={accent} strokeWidth="4" opacity="0.3"/>
+                <path d="M 115 110 C 130 115 150 115 165 110" fill="none" stroke={accent} strokeWidth="1.5"/>
+                <line x1="125" y1="65" x2="130" y2="105" stroke={accent} strokeWidth="1" strokeDasharray="3,3"/>
+                <line x1="155" y1="65" x2="150" y2="105" stroke={accent} strokeWidth="1" strokeDasharray="3,3"/>
+                <line x1="140" y1="113" x2="140" y2="200" stroke={accent} strokeWidth="1" strokeDasharray="5,5" opacity="0.5"/>
+                <line x1="125" y1="112" x2="100" y2="200" stroke={accent} strokeWidth="1" strokeDasharray="5,5" opacity="0.5"/>
+                <line x1="155" y1="112" x2="180" y2="200" stroke={accent} strokeWidth="1" strokeDasharray="5,5" opacity="0.5"/>
+                <line x1="75" y1="195" x2="205" y2="195" stroke={accent} strokeWidth="1" strokeDasharray="2,2"/>
             </svg>
         ),
-
         blazer: (
-            <svg viewBox="0 0 280 220" width={w} height={h}>
-                <rect width="280" height="220" fill={bg} />
-                {/* blazer body */}
-                <path d="M85,38 L195,38 L205,200 L75,200Z" fill={accent} opacity=".18" stroke={accent} strokeWidth="1.5" />
-                {/* left lapel */}
-                <path d="M140,38 L115,38 L88,80 L120,85 L140,65Z" fill={accent} opacity=".32" stroke={accent} strokeWidth="1.2" />
-                {/* right lapel */}
-                <path d="M140,38 L165,38 L192,80 L160,85 L140,65Z" fill={accent} opacity=".32" stroke={accent} strokeWidth="1.2" />
-                {/* notch */}
-                <path d="M118,68 L127,75" fill="none" stroke={accent} strokeWidth="1.5" />
-                <path d="M162,68 L153,75" fill="none" stroke={accent} strokeWidth="1.5" />
-                {/* collar */}
-                <path d="M115,38 Q140,32 165,38 L160,50 Q140,44 120,50Z" fill={accent} opacity=".4" stroke={accent} strokeWidth="1" />
-                {/* set-in sleeves */}
-                <path d="M85,38 L52,48 L48,165 L75,168 L75,200" fill="none" stroke={accent} strokeWidth="1.3" opacity=".7" />
-                <path d="M195,38 L228,48 L232,165 L205,168 L205,200" fill="none" stroke={accent} strokeWidth="1.3" opacity=".7" />
-                {/* welt pocket */}
-                <path d="M92,130 L118,130 L118,138 L92,138Z" fill="none" stroke={accent} strokeWidth="1" opacity=".6" />
-                {/* buttons */}
-                {[0, 1].map(i => (
-                    <circle key={i} cx="140" cy={108 + i * 22} r="4" fill="none" stroke={accent} strokeWidth="1.5" opacity=".8" />
-                ))}
-                {/* pocket square */}
-                <path d="M158,85 L180,85 L178,102 L156,102Z" fill="none" stroke={accent} strokeWidth=".8" opacity=".5" />
-                <text x="140" y="218" textAnchor="middle" fontFamily="DM Mono" fontSize="7" fill={accent} opacity=".5" letterSpacing="3">BLAZER</text>
+            <svg viewBox="0 0 280 220" width={w} height={h} xmlns="http://www.w3.org/2000/svg">
+                <rect width="280" height="220" fill="var(--card)" />
+                <path d="M 120 40 L 160 40 L 175 45 L 210 50 L 205 150 L 180 145 L 185 190 L 95 190 L 100 145 L 75 150 L 70 50 L 105 45 Z" fill={accent} opacity="0.15" stroke={accent} strokeWidth="1.5" strokeLinejoin="round"/>
+                <path d="M 140 40 L 120 40 L 105 85 L 125 90 L 140 130" fill={accent} opacity="0.2" stroke={accent} strokeWidth="1.2" strokeLinejoin="round"/>
+                <path d="M 140 40 L 160 40 L 175 85 L 155 90 L 140 130" fill={accent} opacity="0.2" stroke={accent} strokeWidth="1.2" strokeLinejoin="round"/>
+                <path d="M 115 70 L 122 75 M 165 70 L 158 75" stroke={accent} strokeWidth="1.5"/>
+                <path d="M 120 40 C 130 35 150 35 160 40 L 155 50 C 145 45 135 45 125 50 Z" fill={accent} opacity="0.3" stroke={accent} strokeWidth="1"/>
+                <circle cx="140" cy="140" r="3" fill="none" stroke={accent} strokeWidth="1.5"/><circle cx="140" cy="160" r="3" fill="none" stroke={accent} strokeWidth="1.5"/>
+                <rect x="105" y="140" width="20" height="5" fill="none" stroke={accent} strokeWidth="1" rx="1"/>
+                <rect x="155" y="140" width="20" height="5" fill="none" stroke={accent} strokeWidth="1" rx="1"/>
+                <path d="M 155 95 L 170 95 L 165 105 Z" fill="none" stroke={accent} strokeWidth="1"/>
+                <line x1="140" y1="130" x2="140" y2="190" stroke={accent} strokeWidth="1.5"/>
             </svg>
         ),
-
         trousers: (
-            <svg viewBox="0 0 280 220" width={w} height={h}>
-                <rect width="280" height="220" fill={bg} />
-                {/* high waist wide leg trousers */}
-                {/* waistband */}
-                <path d="M82,32 L198,32 L202,58 L78,58Z" fill={accent} opacity=".35" stroke={accent} strokeWidth="1.5" />
-                {/* left leg - very wide */}
-                <path d="M78,58 L140,58 L130,205 L40,205Z" fill={accent} opacity=".2" stroke={accent} strokeWidth="1.5" />
-                {/* right leg */}
-                <path d="M140,58 L202,58 L240,205 L150,205Z" fill={accent} opacity=".2" stroke={accent} strokeWidth="1.5" />
-                {/* crease lines */}
-                <line x1="78" y1="58" x2="62" y2="205" stroke={accent} strokeWidth="1" strokeDasharray="4,3" opacity=".45" />
-                <line x1="202" y1="58" x2="218" y2="205" stroke={accent} strokeWidth="1" strokeDasharray="4,3" opacity=".45" />
-                {/* belt loops */}
-                {[0, 1, 2, 3].map(i => (
-                    <rect key={i} x={92 + i * 26} y="30" width="6" height="12" fill="none" stroke={accent} strokeWidth="1" opacity=".5" />
-                ))}
-                {/* zipper fly */}
-                <line x1="140" y1="40" x2="140" y2="65" stroke={accent} strokeWidth="1.5" opacity=".6" />
-                {/* side pockets */}
-                <path d="M88,62 Q94,80 90,92" fill="none" stroke={accent} strokeWidth="1.2" opacity=".5" />
-                <path d="M192,62 Q186,80 190,92" fill="none" stroke={accent} strokeWidth="1.2" opacity=".5" />
-                {/* hem lines */}
-                <line x1="40" y1="202" x2="130" y2="202" stroke={accent} strokeWidth="2" opacity=".5" />
-                <line x1="150" y1="202" x2="240" y2="202" stroke={accent} strokeWidth="2" opacity=".5" />
-                <text x="140" y="218" textAnchor="middle" fontFamily="DM Mono" fontSize="7" fill={accent} opacity=".5" letterSpacing="3">WIDE-LEG</text>
+            <svg viewBox="0 0 280 220" width={w} height={h} xmlns="http://www.w3.org/2000/svg">
+                <rect width="280" height="220" fill="var(--card)" />
+                <path d="M 105 35 L 175 35 L 180 55 L 100 55 Z" fill={accent} opacity="0.2" stroke={accent} strokeWidth="1.5" strokeLinejoin="round"/>
+                <path d="M 100 55 L 140 55 L 135 190 L 60 190 L 80 120 Z" fill={accent} opacity="0.1" stroke={accent} strokeWidth="1.5" strokeLinejoin="round"/>
+                <path d="M 140 55 L 180 55 L 200 120 L 220 190 L 145 190 Z" fill={accent} opacity="0.1" stroke={accent} strokeWidth="1.5" strokeLinejoin="round"/>
+                <line x1="95" y1="55" x2="85" y2="190" stroke={accent} strokeWidth="1" strokeDasharray="5,5"/>
+                <line x1="185" y1="55" x2="195" y2="190" stroke={accent} strokeWidth="1" strokeDasharray="5,5"/>
+                <path d="M 115 35 L 115 55 M 140 35 L 140 55 M 165 35 L 165 55" stroke={accent} strokeWidth="2"/>
+                <line x1="140" y1="55" x2="140" y2="85" stroke={accent} strokeWidth="1.5"/>
+                <path d="M 105 60 C 110 75 110 85 105 95 M 175 60 C 170 75 170 85 175 95" fill="none" stroke={accent} strokeWidth="1"/>
+                <line x1="60" y1="185" x2="135" y2="185" stroke={accent} strokeWidth="1" strokeDasharray="3,3"/>
+                <line x1="145" y1="185" x2="220" y2="185" stroke={accent} strokeWidth="1" strokeDasharray="3,3"/>
             </svg>
         ),
-
         pblouse: (
-            <svg viewBox="0 0 280 220" width={w} height={h}>
-                <rect width="280" height="220" fill={bg} />
-                {/* puff sleeve blouse */}
-                {/* body */}
-                <path d="M98,50 L182,50 L185,185 L95,185Z" fill={accent} opacity=".2" stroke={accent} strokeWidth="1.5" />
-                {/* scoop neck */}
-                <path d="M113,50 Q140,62 167,50" fill="none" stroke={accent} strokeWidth="2" />
-                {/* button placket */}
-                <line x1="140" y1="62" x2="140" y2="185" stroke={accent} strokeWidth="1" strokeDasharray="3,2" opacity=".4" />
-                {[0, 1, 2, 3, 4].map(i => (
-                    <circle key={i} cx="140" cy={70 + i * 20} r="2.5" fill={accent} opacity=".75" />
-                ))}
-                {/* LEFT puff sleeve — gathered ball shape */}
-                <path d="M98,50 L72,44 Q38,42 35,70 Q32,98 58,105 L82,108 L98,100" fill={accent} opacity=".22" stroke={accent} strokeWidth="1.5" />
-                <path d="M72,44 Q50,38 40,55 Q32,72 40,90 Q48,106 62,105" fill="none" stroke={accent} strokeWidth="1" opacity=".5" strokeDasharray="3,2" />
-                {/* LEFT cuff gather */}
-                <path d="M58,105 L82,108 L82,118 L58,116Z" fill={accent} opacity=".35" stroke={accent} strokeWidth="1" />
-                {/* RIGHT puff sleeve */}
-                <path d="M182,50 L208,44 Q242,42 245,70 Q248,98 222,105 L198,108 L182,100" fill={accent} opacity=".22" stroke={accent} strokeWidth="1.5" />
-                <path d="M208,44 Q230,38 240,55 Q248,72 240,90 Q232,106 218,105" fill="none" stroke={accent} strokeWidth="1" opacity=".5" strokeDasharray="3,2" />
-                {/* RIGHT cuff */}
-                <path d="M198,108 L222,105 L222,118 L198,116Z" fill={accent} opacity=".35" stroke={accent} strokeWidth="1" />
-                {/* gather lines on sleeves */}
-                {[0, 1, 2].map(i => (
-                    <path key={i} d={`M${42 + i * 8},${68 + i * 4} Q${52 + i * 6},${64 + i * 4} ${62 + i * 8},${68 + i * 4}`} fill="none" stroke={accent} strokeWidth=".8" opacity=".4" />
-                ))}
-                {[0, 1, 2].map(i => (
-                    <path key={i} d={`M${218 - i * 8},${68 + i * 4} Q${228 - i * 6},${64 + i * 4} ${238 - i * 8},${68 + i * 4}`} fill="none" stroke={accent} strokeWidth=".8" opacity=".4" />
-                ))}
-                {/* hem */}
-                <path d="M95,185 Q140,180 185,185" fill="none" stroke={accent} strokeWidth="1.5" opacity=".5" />
-                <text x="140" y="215" textAnchor="middle" fontFamily="DM Mono" fontSize="7" fill={accent} opacity=".5" letterSpacing="3">PUFF SLEEVE</text>
+            <svg viewBox="0 0 280 220" width={w} height={h} xmlns="http://www.w3.org/2000/svg">
+                <rect width="280" height="220" fill="var(--card)" />
+                <path d="M 115 50 C 130 65 150 65 165 50 L 175 55 L 175 180 L 105 180 L 105 55 Z" fill={accent} opacity="0.15" stroke={accent} strokeWidth="1.5" strokeLinejoin="round"/>
+                <path d="M 115 50 C 130 65 150 65 165 50" fill="none" stroke={accent} strokeWidth="2"/>
+                <line x1="140" y1="60" x2="140" y2="180" stroke={accent} strokeWidth="1.5" strokeDasharray="4,2"/>
+                <circle cx="140" cy="75" r="2" fill={accent}/><circle cx="140" cy="100" r="2" fill={accent}/>
+                <circle cx="140" cy="125" r="2" fill={accent}/><circle cx="140" cy="150" r="2" fill={accent}/>
+                {/* Left Sleeve */}
+                <path d="M 105 55 C 65 50 50 80 60 115 C 80 120 100 115 105 105 Z" fill={accent} opacity="0.25" stroke={accent} strokeWidth="1.5" strokeLinejoin="round"/>
+                <path d="M 60 115 C 70 125 90 125 105 105" fill="none" stroke={accent} strokeWidth="1" strokeDasharray="2,2"/>
+                <path d="M 70 120 L 75 125 L 85 125 M 60 115 L 65 125 L 70 120" stroke={accent} strokeWidth="1" fill="none"/>
+                <path d="M 100 65 C 85 75 80 95 85 105" fill="none" stroke={accent} strokeWidth="0.8" opacity="0.6"/>
+                {/* Right Sleeve */}
+                <path d="M 175 55 C 215 50 230 80 220 115 C 200 120 180 115 175 105 Z" fill={accent} opacity="0.25" stroke={accent} strokeWidth="1.5" strokeLinejoin="round"/>
+                <path d="M 220 115 C 210 125 190 125 175 105" fill="none" stroke={accent} strokeWidth="1" strokeDasharray="2,2"/>
+                <path d="M 210 120 L 205 125 L 195 125 M 220 115 L 215 125 L 210 120" stroke={accent} strokeWidth="1" fill="none"/>
+                <path d="M 180 65 C 195 75 200 95 195 105" fill="none" stroke={accent} strokeWidth="0.8" opacity="0.6"/>
+                <line x1="105" y1="175" x2="175" y2="175" stroke={accent} strokeWidth="1" strokeDasharray="3,3"/>
             </svg>
         ),
     };
@@ -616,23 +393,23 @@ const GarmentIllustration: FC<{ type: GarmentType; accent: string; bg: string; s
    PATTERN SVGs
 ═══════════════════════════════════════════ */
 const PatSVG: FC<PatSVGProps> = ({ shape }): ReactElement => {
-    const c = "#C14B1A", f = "rgba(193,75,26,0.07)", g = "#2D6A4F";
+    const c = "#C14B1A", f = "rgba(255,255,255,1)", g = "#2D6A4F";
+    // Technical-grade exact pattern shapes with notches and grainlines
     const shapes: Record<PatternShape, ReactElement> = {
-        front_bodice: (<svg viewBox="0 0 110 145" width="98" height="130"><path d="M18,10 L92,10 L100,28 L104,135 L6,135 L10,28Z" fill={f} stroke={c} strokeWidth="1.3" /><path d="M18,10 Q55,18 92,10" fill="none" stroke={c} strokeWidth=".8" strokeDasharray="3,2" /><line x1="6" y1="72" x2="104" y2="72" stroke={c} strokeWidth=".4" strokeDasharray="3,2" /><text x="55" y="90" textAnchor="middle" fontFamily="DM Mono" fontSize="7" fill={c} opacity=".5">CF</text><line x1="55" y1="38" x2="55" y2="62" stroke={g} strokeWidth="1.2" /><text x="60" y="52" fontFamily="DM Mono" fontSize="5" fill={g}>GRAIN</text></svg>),
-        back_bodice: (<svg viewBox="0 0 110 145" width="98" height="130"><path d="M14,8 L96,8 L104,26 L106,136 L4,136 L6,26Z" fill={f} stroke={c} strokeWidth="1.3" /><path d="M14,8 Q55,4 96,8" fill="none" stroke={c} strokeWidth=".8" strokeDasharray="4,2" /><line x1="4" y1="74" x2="106" y2="74" stroke={c} strokeWidth=".4" strokeDasharray="3,2" /><text x="55" y="94" textAnchor="middle" fontFamily="DM Mono" fontSize="7" fill={c} opacity=".5">CB</text><line x1="55" y1="32" x2="55" y2="60" stroke={g} strokeWidth="1.2" /></svg>),
-        sleeve: (<svg viewBox="0 0 120 158" width="106" height="140"><path d="M60,9 C88,9 110,26 110,46 L103,150 L17,150 L10,46 C10,26 32,9 60,9Z" fill={f} stroke={c} strokeWidth="1.3" /><line x1="17" y1="136" x2="103" y2="136" stroke={c} strokeWidth=".7" strokeDasharray="4,3" /><line x1="60" y1="36" x2="60" y2="68" stroke={g} strokeWidth="1.2" /></svg>),
-        collar: (<svg viewBox="0 0 155 76" width="138" height="68"><path d="M8,58 L18,13 Q78,3 136,13 L146,58 Q78,70 8,58Z" fill={f} stroke={c} strokeWidth="1.3" /><line x1="78" y1="13" x2="78" y2="58" stroke={c} strokeWidth=".4" strokeDasharray="2,2" /><line x1="78" y1="22" x2="78" y2="46" stroke={g} strokeWidth="1.2" /></svg>),
-        skirt_panel: (<svg viewBox="0 0 130 168" width="115" height="150"><path d="M28,10 L102,10 L125,160 L5,160Z" fill={f} stroke={c} strokeWidth="1.3" /><line x1="28" y1="10" x2="102" y2="10" stroke={c} strokeWidth="1.1" strokeDasharray="5,3" /><line x1="10" y1="145" x2="120" y2="145" stroke={c} strokeWidth=".7" strokeDasharray="4,3" /><line x1="65" y1="32" x2="65" y2="72" stroke={g} strokeWidth="1.2" /></svg>),
-        trouser_front: (<svg viewBox="0 0 115 192" width="100" height="170"><path d="M18,10 L97,10 L100,95 L90,192 L58,192 L55,125 L22,192 L10,192 L14,95Z" fill={f} stroke={c} strokeWidth="1.3" /><line x1="14" y1="95" x2="100" y2="95" stroke={c} strokeWidth=".5" strokeDasharray="3,2" /><line x1="57" y1="38" x2="57" y2="75" stroke={g} strokeWidth="1.2" /></svg>),
-        waistband: (<svg viewBox="0 0 190 55" width="170" height="49"><rect x="8" y="8" width="174" height="38" fill={f} stroke={c} strokeWidth="1.3" /><line x1="8" y1="27" x2="182" y2="27" stroke={c} strokeWidth=".5" strokeDasharray="4,3" /><line x1="95" y1="12" x2="95" y2="44" stroke={g} strokeWidth="1.2" /></svg>),
-        agbada_outer: (<svg viewBox="0 0 200 140" width="178" height="124"><path d="M5,10 Q100,2 195,10 L190,130 L10,130Z" fill={f} stroke={c} strokeWidth="1.3" /><path d="M5,10 Q100,2 195,10" fill="none" stroke={c} strokeWidth="1.1" strokeDasharray="5,3" /><line x1="100" y1="25" x2="100" y2="60" stroke={g} strokeWidth="1.2" /><text x="100" y="88" textAnchor="middle" fontFamily="DM Mono" fontSize="7" fill={c} opacity=".5">OUTER ROBE</text></svg>),
-        embroidery_panel: (<svg viewBox="0 0 60 120" width="52" height="105"><rect x="6" y="6" width="48" height="108" fill={f} stroke={c} strokeWidth="1.3" />{[0, 1, 2, 3, 4, 5].map(i => <path key={i} d={`M18,${16 + i * 16} Q30,${22 + i * 16} 42,${16 + i * 16}`} fill="none" stroke={c} strokeWidth=".9" opacity=".5" />)}<line x1="30" y1="20" x2="30" y2="55" stroke={g} strokeWidth="1.2" /></svg>),
-        kente_strip: (<svg viewBox="0 0 45 160" width="38" height="142"><rect x="5" y="5" width="35" height="150" fill={f} stroke={c} strokeWidth="1.3" />{[0, 1, 2, 3, 4, 5, 6, 7].map(i => <rect key={i} x="5" y={5 + i * 19} width="35" height="9" fill={(["#D4A017", "#B22222", "#2D6A4F", "#0A0805"] as string[])[i % 4]} opacity=".25" />)}<line x1="22" y1="20" x2="22" y2="55" stroke={g} strokeWidth="1.2" /></svg>),
-        pocket: (<svg viewBox="0 0 88 97" width="78" height="86"><path d="M9,9 L79,9 L82,88 L6,88Z" fill={f} stroke={c} strokeWidth="1.3" /><line x1="44" y1="28" x2="44" y2="55" stroke={g} strokeWidth="1.2" /></svg>),
+        front_bodice: (<svg viewBox="0 0 120 160" width="100" height="135"><path d="M20,15 L75,15 C 85 15 95 25 100,40 L110,140 C 110 145 105 150 100 150 L15,150 L20,40 Z" fill={f} stroke={c} strokeWidth="2" strokeLinejoin="round"/><path d="M20,15 C 45 25 70 25 75,15" fill="none" stroke={c} strokeWidth="1" strokeDasharray="4,2"/><text x="45" y="100" textAnchor="middle" fontFamily="DM Mono" fontSize="8" fill={c} opacity="0.6">CF FOLD</text><line x1="65" y1="50" x2="65" y2="120" stroke={g} strokeWidth="2"/><polygon points="61,55 65,45 69,55" fill={g}/><polygon points="61,115 65,125 69,115" fill={g}/><text x="70" y="85" fontFamily="DM Mono" fontSize="6" fill={g}>GRAIN</text><path d="M20,15 L20,150" stroke={c} strokeWidth="2.5"/></svg>),
+        back_bodice: (<svg viewBox="0 0 120 160" width="100" height="135"><path d="M15,10 L80,10 C 90 10 100 20 105,35 L115,145 C 115 150 110 150 105 150 L10,150 L15,35 Z" fill={f} stroke={c} strokeWidth="2" strokeLinejoin="round"/><path d="M15,10 C 40 15 65 15 80,10" fill="none" stroke={c} strokeWidth="1" strokeDasharray="4,2"/><text x="45" y="100" textAnchor="middle" fontFamily="DM Mono" fontSize="8" fill={c} opacity="0.6">CB FOLD</text><line x1="60" y1="45" x2="60" y2="115" stroke={g} strokeWidth="2"/><polygon points="56,50 60,40 64,50" fill={g}/><polygon points="56,110 60,120 64,110" fill={g}/><path d="M15,10 L10,150" stroke={c} strokeWidth="2.5"/><line x1="85" y1="18" x2="90" y2="18" stroke={c} strokeWidth="2"/></svg>),
+        sleeve: (<svg viewBox="0 0 140 160" width="115" height="135"><path d="M70,10 C 110 10 135 30 135,55 L120,145 L20,145 L5,55 C 5 30 30 10 70,10 Z" fill={f} stroke={c} strokeWidth="2" strokeLinejoin="round"/><line x1="70" y1="35" x2="70" y2="125" stroke={g} strokeWidth="2"/><polygon points="66,40 70,30 74,40" fill={g}/><polygon points="66,120 70,130 74,120" fill={g}/><text x="75" y="85" fontFamily="DM Mono" fontSize="6" fill={g}>GRAIN</text><line x1="30" y1="28" x2="33" y2="33" stroke={c} strokeWidth="2"/><line x1="110" y1="28" x2="107" y2="33" stroke={c} strokeWidth="2"/><line x1="113" y1="26" x2="110" y2="31" stroke={c} strokeWidth="2"/></svg>),
+        collar: (<svg viewBox="0 0 160 80" width="140" height="70"><path d="M10,65 L25,15 C 60 5 100 5 135,15 L150,65 C 100 75 60 75 10,65 Z" fill={f} stroke={c} strokeWidth="2" strokeLinejoin="round"/><line x1="80" y1="25" x2="80" y2="55" stroke={g} strokeWidth="2"/><polygon points="76,30 80,20 84,30" fill={g}/><text x="85" y="45" fontFamily="DM Mono" fontSize="6" fill={g}>GRAIN</text><path d="M80,8 L80,72" stroke={c} strokeWidth="1" strokeDasharray="3,2"/></svg>),
+        skirt_panel: (<svg viewBox="0 0 140 180" width="115" height="150"><path d="M30,10 L110,10 L135,170 L5,170 Z" fill={f} stroke={c} strokeWidth="2" strokeLinejoin="round"/><line x1="30" y1="10" x2="110" y2="10" stroke={c} strokeWidth="1" strokeDasharray="5,3"/><line x1="70" y1="40" x2="70" y2="140" stroke={g} strokeWidth="2"/><polygon points="66,45 70,35 74,45" fill={g}/><polygon points="66,135 70,145 74,135" fill={g}/><text x="75" y="90" fontFamily="DM Mono" fontSize="6" fill={g}>GRAIN</text><line x1="15" y1="165" x2="125" y2="165" stroke={c} strokeWidth="1" strokeDasharray="4,2"/></svg>),
+        trouser_front: (<svg viewBox="0 0 130 210" width="105" height="170"><path d="M20,10 L105,10 L110,100 C 110 110 105 120 95,200 L65,200 L60,135 L25,200 L10,200 L15,100 Z" fill={f} stroke={c} strokeWidth="2" strokeLinejoin="round"/><line x1="60" y1="30" x2="60" y2="150" stroke={g} strokeWidth="2"/><polygon points="56,35 60,25 64,35" fill={g}/><polygon points="56,145 60,155 64,145" fill={g}/><text x="65" y="90" fontFamily="DM Mono" fontSize="6" fill={g}>CREASE/GRAIN</text><path d="M20,10 L15,100" stroke={c} strokeWidth="2.5"/><line x1="20" y1="40" x2="25" y2="40" stroke={c} strokeWidth="2"/><line x1="20" y1="80" x2="25" y2="80" stroke={c} strokeWidth="2"/></svg>),
+        waistband: (<svg viewBox="0 0 190 55" width="170" height="49"><rect x="10" y="10" width="170" height="35" rx="2" fill={f} stroke={c} strokeWidth="2"/><line x1="10" y1="27.5" x2="180" y2="27.5" stroke={c} strokeWidth="1" strokeDasharray="5,3"/><line x1="95" y1="15" x2="95" y2="40" stroke={g} strokeWidth="2"/><polygon points="91,20 95,10 99,20" fill={g}/><text x="100" y="22" fontFamily="DM Mono" fontSize="6" fill={g}>GRAIN</text><line x1="45" y1="10" x2="45" y2="15" stroke={c} strokeWidth="2"/><line x1="145" y1="10" x2="145" y2="15" stroke={c} strokeWidth="2"/></svg>),
+        agbada_outer: (<svg viewBox="0 0 210 150" width="180" height="130"><path d="M5,15 C 105 5 205 15 205,15 L195,140 L15,140 Z" fill={f} stroke={c} strokeWidth="2" strokeLinejoin="round"/><path d="M5,15 C 105 5 205 15 205,15" fill="none" stroke={c} strokeWidth="1" strokeDasharray="5,5"/><line x1="105" y1="30" x2="105" y2="90" stroke={g} strokeWidth="2"/><polygon points="101,35 105,25 109,35" fill={g}/><polygon points="101,85 105,95 109,85" fill={g}/><text x="110" y="65" fontFamily="DM Mono" fontSize="7" fill={g}>GRAIN FOLD</text><ellipse cx="105" cy="40" rx="20" ry="10" fill="none" stroke={c} strokeWidth="1" strokeDasharray="2,2"/></svg>),
+        embroidery_panel: (<svg viewBox="0 0 60 130" width="50" height="110"><rect x="10" y="10" width="40" height="110" rx="3" fill={f} stroke={c} strokeWidth="2"/>{[0,1,2,3,4,5].map(i=><path key={i} d={`M20,${25+i*16} C 30,${35+i*16} 40,${25+i*16} 40,${25+i*16}`} fill="none" stroke={c} strokeWidth="1.2" opacity="0.6"/>)}<line x1="30" y1="20" x2="30" y2="110" stroke={g} strokeWidth="2"/><polygon points="26,25 30,15 34,25" fill={g}/><polygon points="26,105 30,115 34,105" fill={g}/></svg>),
+        kente_strip: (<svg viewBox="0 0 45 180" width="35" height="150"><rect x="10" y="10" width="25" height="160" fill={f} stroke={c} strokeWidth="2"/>{[0,1,2,3,4,5,6,7,8].map(i=><rect key={i} x="10" y={10+i*17.7} width="25" height="10" fill={(["#D4A017","#B22222","#2D6A4F","#0A0805"] as string[])[i%4]} opacity="0.3"/>)}<line x1="22.5" y1="30" x2="22.5" y2="150" stroke={g} strokeWidth="2"/><polygon points="18.5,35 22.5,25 26.5,35" fill={g}/><polygon points="18.5,145 22.5,155 26.5,145" fill={g}/></svg>),
+        pocket: (<svg viewBox="0 0 100 110" width="80" height="90"><path d="M15,15 L85,15 L90,80 C 90 95 70 100 50 100 C 30 100 10 95 10 80 Z" fill={f} stroke={c} strokeWidth="2" strokeLinejoin="round"/><line x1="50" y1="35" x2="50" y2="75" stroke={g} strokeWidth="2"/><polygon points="46,40 50,30 54,40" fill={g}/><polygon points="46,70 50,80 54,70" fill={g}/><line x1="15" y1="15" x2="85" y2="15" stroke={c} strokeWidth="2.5"/><line x1="45" y1="15" x2="55" y2="15" stroke={c} strokeWidth="2"/></svg>),
     };
     return shapes[shape] ?? shapes.front_bodice;
 };
-
 /* ═══════════════════════════════════════════
    DATA
 ═══════════════════════════════════════════ */

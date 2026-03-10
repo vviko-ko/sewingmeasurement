@@ -154,6 +154,33 @@ html,body{background:var(--bg);color:var(--text);font-family:'Outfit',sans-serif
 @keyframes fadeUp{from{opacity:0;transform:translateY(20px);}to{opacity:1;transform:translateY(0);}}
 @keyframes float{0%,100%{transform:translateY(0);}50%{transform:translateY(-6px);}}
 .ill-float{animation:float 4s ease-in-out infinite;}
+
+@media (max-width: 900px) {
+  .hero { flex-direction: column; padding: 100px 2rem 2rem; }
+  .hero-right { margin-top: 3rem; max-width: 100%; }
+  .dpanel { width: 320px; min-width: 320px; }
+}
+@media (max-width: 768px) {
+  .logo-sub { display: none; }
+  .hdr { padding: 0 1rem; }
+  .nav { gap: 1rem; }
+  .fbar { top: 60px; padding: .6rem 1rem; }
+  .layout { flex-direction: column; }
+  .gallery { padding: 1rem; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: .8rem; }
+  .card-ill { height: 160px; }
+  
+  .dpanel {
+    position: fixed; top: 0; left: 0; width: 100%; min-width: 100%; height: 100vh; max-height: 100vh;
+    z-index: 500; transform: translateY(100%); transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .dpanel.active { transform: translateY(0); }
+  .dp-empty { display: none; }
+  .mgrid { grid-template-columns: 1fr; }
+  .dp-actions { position: sticky; bottom: 0; background: var(--surface); padding-bottom: 2rem; z-index: 10; border-top: 1px solid var(--border); }
+  .pm-box { margin: 10px; max-height: calc(100vh - 20px); }
+  .pm-inner { flex-direction: column; }
+  .pm-pat { width: 100%; overflow: hidden; display: flex; justify-content: center; }
+}
 `;
 /* ═══════════════════════════════════════════
    GARMENT ILLUSTRATIONS — pure inline SVG
@@ -917,7 +944,7 @@ export default function AtelierApp(): ReactElement {
                                 </div>
                             )}
                         </div>
-                        <div className="dpanel">
+                        <div className={`dpanel${sel ? " active" : ""}`}>
                             {sel ? (
                                 <>
                                     <div className="dp-stage">

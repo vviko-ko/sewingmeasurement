@@ -1,0 +1,50 @@
+﻿
+> tmp-app@0.0.0 build
+> tsc -b && vite build
+
+src/App.tsx(713,14): error TS2678: Type '"buba_front"' is not comparable to type 'PatternShape'.
+src/App.tsx(717,14): error TS2678: Type '"buba_back"' is not comparable to type 'PatternShape'.
+src/App.tsx(757,14): error TS2678: Type '"belt"' is not comparable to type 'PatternShape'.
+src/App.tsx(1008,36): error TS2304: Cannot find name 'FilterCat'.
+src/App.tsx(1009,42): error TS2304: Cannot find name 'FilterRegion'.
+src/App.tsx(1010,40): error TS2304: Cannot find name 'FilterLevel'.
+src/App.tsx(1087,26): error TS2552: Cannot find name 'CATS'. Did you mean 'cat'?
+src/App.tsx(1087,35): error TS7006: Parameter 'c' implicitly has an 'any' type.
+src/App.tsx(1091,26): error TS2552: Cannot find name 'REGIONS'. Did you mean 'region'?
+src/App.tsx(1091,38): error TS7006: Parameter 'r' implicitly has an 'any' type.
+src/App.tsx(1095,26): error TS2552: Cannot find name 'LEVELS'. Did you mean 'level'?
+src/App.tsx(1095,37): error TS7006: Parameter 'l' implicitly has an 'any' type.
+src/App.tsx(1096,121): error TS2304: Cannot find name 'FilterLevel'.
+src/App.tsx(1105,89): error TS2552: Cannot find name 'setModTab'. Did you mean 'setTab'?
+src/App.tsx(1142,60): error TS2304: Cannot find name 'modTab'.
+src/App.tsx(1142,111): error TS2304: Cannot find name 'setModTab'.
+src/App.tsx(1143,60): error TS2304: Cannot find name 'modTab'.
+src/App.tsx(1143,109): error TS2304: Cannot find name 'setModTab'.
+src/App.tsx(1144,60): error TS2304: Cannot find name 'modTab'.
+src/App.tsx(1144,111): error TS2304: Cannot find name 'setModTab'.
+src/App.tsx(1144,131): error TS2304: Cannot find name 'setRotX'.
+src/App.tsx(1144,145): error TS2304: Cannot find name 'setRotY'.
+src/App.tsx(1144,158): error TS2304: Cannot find name 'setExpState'.
+src/App.tsx(1147,30): error TS2304: Cannot find name 'modTab'.
+src/App.tsx(1195,30): error TS2304: Cannot find name 'modTab'.
+src/App.tsx(1219,30): error TS2304: Cannot find name 'modTab'.
+src/App.tsx(1220,77): error TS2304: Cannot find name 'handlePointerDown'.
+src/App.tsx(1220,111): error TS2304: Cannot find name 'handlePointerMove'.
+src/App.tsx(1220,143): error TS2304: Cannot find name 'handlePointerUp'.
+src/App.tsx(1221,98): error TS2304: Cannot find name 'rotX'.
+src/App.tsx(1221,118): error TS2304: Cannot find name 'rotY'.
+src/App.tsx(1230,68): error TS2304: Cannot find name 'expState'.
+src/App.tsx(1230,92): error TS2304: Cannot find name 'expState'.
+src/App.tsx(1233,64): error TS2304: Cannot find name 'expState'.
+src/App.tsx(1234,64): error TS2304: Cannot find name 'expState'.
+src/App.tsx(1235,64): error TS2304: Cannot find name 'expState'.
+src/App.tsx(1236,65): error TS2304: Cannot find name 'expState'.
+src/App.tsx(1249,54): error TS2304: Cannot find name 'expState'.
+src/App.tsx(1259,84): error TS2304: Cannot find name 'setExpState'.
+src/App.tsx(1259,121): error TS2304: Cannot find name 'expState'.
+src/App.tsx(1260,84): error TS2304: Cannot find name 'setExpState'.
+src/App.tsx(1260,121): error TS2304: Cannot find name 'expState'.
+src/App.tsx(1261,84): error TS2304: Cannot find name 'setExpState'.
+src/App.tsx(1261,121): error TS2304: Cannot find name 'expState'.
+src/App.tsx(1262,86): error TS2304: Cannot find name 'setRotX'.
+src/App.tsx(1262,100): error TS2304: Cannot find name 'setRotY'.

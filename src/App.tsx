@@ -1,4 +1,4 @@
-import { useState, type FC, type ReactElement } from "react";
+import React, { useState, type FC, type ReactElement } from "react";
 
 /* ═══════════════════════════════════════════
    TYPES
@@ -18,7 +18,7 @@ type PatternShape =
     | "fly_shield" | "pocket_bag" | "pocket_welt" | "pocket_flap"
     | "upper_sleeve" | "under_sleeve" | "agbada_inner" | "gele_tie"
     | "wrapper_panel" | "lapel_facing" | "placket" | "buba_sleeve"
-    | "side_panel";
+    | "side_panel" | "buba_front" | "buba_back" | "belt";
 
 interface PatternPiece {
     id: string; name: string; shape: PatternShape;
@@ -32,7 +32,11 @@ interface GarmentStyle {
     desc: string; measurements: Record<string, string>;
     pieces: PatternPiece[];
 }
-interface PatSVGProps { shape: PatternShape; }
+interface PatSVGProps {
+    shape: PatternShape;
+    theme?: "paper" | "fabric";
+    fabricColor?: string;
+}
 
 /* ═══════════════════════════════════════════
    CSS
@@ -161,10 +165,75 @@ html,body{background:var(--bg);color:var(--text);font-family:'Outfit',sans-serif
 @keyframes float{0%,100%{transform:translateY(0);}50%{transform:translateY(-6px);}}
 .ill-float{animation:float 4s ease-in-out infinite;}
 
+/* ═══════════════════════════════════════════
+   PATTERN MODAL (NEW)
+═══════════════════════════════════════════ */
+.vmod-ov{position:fixed;inset:0;background:rgba(0,0,0,0.7);backdrop-filter:blur(8px);z-index:400;display:flex;align-items:center;justify-content:center;padding:2rem;}
+.vmod-box{background:var(--bg);width:100%;max-width:1200px;height:calc(100vh - 4rem);border:1px solid var(--border2);display:flex;flex-direction:column;box-shadow:0 24px 64px rgba(0,0,0,0.4);border-radius:4px;overflow:hidden;animation:fadeUp .3s ease;}
+.vmod-hdr{padding:1.2rem 2rem;background:var(--card);border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;}
+.vmod-title{font-family:'Playfair Display',serif;font-weight:700;font-size:1.5rem;color:var(--cream);}
+.vmod-close{background:none;border:none;font-size:2rem;line-height:1;cursor:pointer;color:var(--muted);transition:color .2s;}
+.vmod-close:hover{color:var(--rust);}
+.vmod-tabs{display:flex;background:var(--surface);border-bottom:1px solid var(--border);padding:0 2rem;}
+.vmod-tab{padding:1rem 1.5rem;font-family:'DM Mono',monospace;font-size:.65rem;letter-spacing:.15em;text-transform:uppercase;color:var(--muted);background:none;border:none;cursor:pointer;border-bottom:2px solid transparent;transition:all .2s;}
+.vmod-tab:hover{color:var(--gold);}
+.vmod-tab.on{color:var(--rust);border-bottom-color:var(--rust);background:var(--card);}
+.vmod-body{flex:1;overflow:hidden;position:relative;background:var(--bg);}
+.vmod-cnt{height:100%;overflow-y:auto;padding:2rem;}
+
+/* Details Tab */
+.vmod-det-grid{display:grid;grid-template-columns:350px 1fr;gap:3rem;height:100%;}
+.vmod-det-left{border-right:1px solid var(--border);padding-right:2rem;}
+.vmod-eb{font-family:'DM Mono',monospace;font-size:.6rem;letter-spacing:.2em;text-transform:uppercase;color:var(--rust);margin-bottom:.5rem;}
+.vmod-desc{font-size:.95rem;font-weight:300;line-height:1.7;color:var(--subtext);font-style:italic;margin-bottom:2rem;}
+.vmod-det-right{}
+
+/* ——— Assembly 2D — Tailor's Flat-Lay ——— */
+.asm-2d{height:100%;display:flex;align-items:stretch;background:linear-gradient(160deg,#F9F5ED 0%,#F0EBE0 100%);position:relative;overflow:hidden;}
+.asm-2d::before{content:'';position:absolute;inset:0;background-image:repeating-linear-gradient(0deg,rgba(0,0,0,0.03) 0px,rgba(0,0,0,0.03) 1px,transparent 1px,transparent 40px),repeating-linear-gradient(90deg,rgba(0,0,0,0.03) 0px,rgba(0,0,0,0.03) 1px,transparent 1px,transparent 40px);pointer-events:none;}
+.asm-2d-center{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;position:relative;padding:2rem;}
+.asm-2d-title{font-family:'DM Mono',monospace;font-size:.55rem;letter-spacing:.22em;text-transform:uppercase;color:var(--rust);margin-bottom:1.2rem;display:flex;align-items:center;gap:8px;}
+.asm-2d-title::before,.asm-2d-title::after{content:'';flex:1;height:1px;background:rgba(193,75,26,0.2);}
+.asm-garment-wrap{position:relative;background:rgba(255,255,255,0.7);border:1px solid rgba(0,0,0,0.06);border-radius:4px;box-shadow:0 8px 40px rgba(0,0,0,0.08);padding:1rem;backdrop-filter:blur(4px);}
+.asm-callout{position:absolute;width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'DM Mono',monospace;font-size:.55rem;font-weight:700;color:#fff;border:2px solid rgba(255,255,255,0.8);box-shadow:0 2px 8px rgba(0,0,0,0.25);cursor:default;transition:transform .2s;z-index:5;}
+.asm-callout:hover{transform:scale(1.3);z-index:10;}
+.asm-callout-line{position:absolute;pointer-events:none;z-index:2;}
+.asm-legend{width:260px;min-width:260px;background:rgba(255,255,255,0.85);border-left:1px solid rgba(0,0,0,0.07);overflow-y:auto;display:flex;flex-direction:column;}
+.asm-legend-hdr{padding:1rem 1.2rem .6rem;font-family:'DM Mono',monospace;font-size:.5rem;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);border-bottom:1px solid rgba(0,0,0,0.06);}
+.asm-leg-item{display:flex;align-items:center;gap:.8rem;padding:.65rem 1.2rem;border-bottom:1px solid rgba(0,0,0,0.04);transition:background .15s;cursor:default;}
+.asm-leg-item:hover{background:rgba(212,160,23,0.06);}
+.asm-leg-badge{width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'DM Mono',monospace;font-size:.55rem;font-weight:700;color:#fff;flex-shrink:0;}
+.asm-leg-info{flex:1;min-width:0;}
+.asm-leg-name{font-family:'Outfit',sans-serif;font-weight:600;font-size:.82rem;color:var(--cream);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.asm-leg-dim{font-family:'DM Mono',monospace;font-size:.5rem;color:var(--muted);margin-top:1px;}
+.asm-leg-svg{flex-shrink:0;opacity:.9;}
+
+/* ——— Assembly 3D ——— */
+.asm-3d-wrap{height:100%;width:100%;perspective:1400px;display:flex;align-items:center;justify-content:center;background:radial-gradient(ellipse 70% 60% at 50% 42%,#1a1530 0%,#050505 80%);position:relative;overflow:hidden;}
+.asm-3d-wrap::before{content:'';position:absolute;inset:0;background:radial-gradient(circle at 50% 40%, rgba(212,160,23,0.04) 0%,transparent 60%);pointer-events:none;}
+.asm-3d-scene{width:600px;height:800px;transform-style:preserve-3d;position:relative;transition:transform 0.1s linear;cursor:grab;}
+.asm-3d-scene:active{cursor:grabbing;}
+.asm-3d-item{position:absolute;top:50%;left:50%;transform-style:preserve-3d;display:flex;align-items:center;justify-content:center;transform:translate(-50%,-50%);transition:transform 0.65s cubic-bezier(0.2,0.8,0.2,1),opacity .4s;}
+.asm-3d-item svg{filter:url(#paper-texture) drop-shadow(0 2px 0 #c0a88a) drop-shadow(0 4px 0 #a08060) drop-shadow(0 24px 32px rgba(0,0,0,0.9));}
+.asm-3d-item.fab-mat svg{filter:url(#fab-texture) drop-shadow(0 2px 6px rgba(0,0,0,0.5)) drop-shadow(0 10px 30px rgba(0,0,0,0.9));}
+.asm-3d-item.assembled-mode svg{filter:url(#fab-texture) drop-shadow(0 2px 8px rgba(0,0,0,0.6)) drop-shadow(0 6px 20px rgba(0,0,0,0.7));}
+.asm-3d-item::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(255,255,255,0.12) 0%,transparent 40%,rgba(0,0,0,0.15) 100%);pointer-events:none;mix-blend-mode:overlay;z-index:10;border-radius:2px;}
+.asm-body-form{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%) translateZ(0px);transform-style:preserve-3d;pointer-events:none;opacity:0.18;}
+.asm-3d-hud{position:absolute;bottom:2rem;left:2rem;color:rgba(255,255,255,0.6);font-family:'DM Mono',monospace;font-size:.6rem;letter-spacing:.1em;text-transform:uppercase;z-index:20;}
+.asm-3d-ctrls{position:absolute;bottom:2rem;right:2rem;display:flex;gap:.6rem;z-index:20;flex-wrap:wrap;justify-content:flex-end;}
+.asm-btn{background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.18);color:#fff;padding:8px 14px;font-family:'DM Mono',monospace;font-size:.58rem;cursor:pointer;backdrop-filter:blur(6px);transition:all .2s;letter-spacing:.06em;}
+.asm-btn:hover{background:rgba(255,255,255,0.18);}
+.asm-btn.active{background:rgba(212,160,23,0.3);border-color:var(--gold);}
+.asm-seam{position:absolute;background:rgba(212,160,23,0.5);transform-style:preserve-3d;box-shadow:0 0 6px rgba(212,160,23,0.3);}
+.asm-thread{position:absolute;width:2px;background:linear-gradient(to bottom,rgba(212,160,23,0.6),rgba(212,160,23,0.1));transform-style:preserve-3d;transform-origin:top center;}
+
 @media (max-width: 900px) {
   .hero { flex-direction: column; padding: 100px 2rem 2rem; }
   .hero-right { margin-top: 3rem; max-width: 100%; }
-  .dpanel { width: 320px; min-width: 320px; }
+  .vmod-box{height:100vh;max-height:100vh;border-radius:0;margin:0;}
+  .vmod-ov{padding:0;}
+  .vmod-det-grid{grid-template-columns:1fr;gap:2rem;}
+  .vmod-det-left{border-right:none;border-bottom:1px solid var(--border);padding-right:0;padding-bottom:2rem;}
 }
 @media (max-width: 768px) {
   .logo-sub { display: none; }
@@ -174,18 +243,12 @@ html,body{background:var(--bg);color:var(--text);font-family:'Outfit',sans-serif
   .layout { flex-direction: column; }
   .gallery { padding: 1rem; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: .8rem; }
   .card-ill { height: 160px; }
-  
-  .dpanel {
-    position: fixed; top: 0; left: 0; width: 100%; min-width: 100%; height: 100vh; max-height: 100vh;
-    z-index: 500; transform: translateY(100%); transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-  }
-  .dpanel.active { transform: translateY(0); }
-  .dp-empty { display: none; }
-  .mgrid { grid-template-columns: 1fr; }
-  .dp-actions { position: sticky; bottom: 0; background: var(--surface); padding-bottom: 2rem; z-index: 10; border-top: 1px solid var(--border); }
   .pm-box { margin: 10px; max-height: calc(100vh - 20px); }
   .pm-inner { flex-direction: column; }
   .pm-pat { width: 100%; overflow: hidden; display: flex; justify-content: center; }
+  .vmod-hdr{padding:1rem;}
+  .vmod-tabs{padding:0;overflow-x:auto;}
+  .vmod-cnt{padding:1rem;}
 }
 `;
 /* ═══════════════════════════════════════════
@@ -398,8 +461,13 @@ const GarmentIllustration: FC<{ type: GarmentType; accent: string; bg: string; s
 /* ═══════════════════════════════════════════
    PATTERN SVGs
 ═══════════════════════════════════════════ */
-const PatSVG: FC<PatSVGProps> = ({ shape }): ReactElement => {
-    const c = "#C14B1A", f = "rgba(255,255,255,1)", g = "#2D6A4F";
+const PatSVG: FC<PatSVGProps> = ({ shape, theme = "paper", fabricColor = "#D4A017" }): ReactElement => {
+    const isFab = theme === "fabric";
+
+    const f = isFab ? fabricColor : "#D9C9B4"; // Fabric vs Kraft brown
+    const c = isFab ? "rgba(0,0,0,0.2)" : "#734F33"; // Pen ink or soft fabric seam
+    const g = isFab ? "rgba(255,255,255,0.3)" : "#2D6A4F"; // Subtle grain line on fabric
+
     // Technical-grade exact pattern shapes with seam allowances, notches, drill holes, and grainlines
     const N = (x: number, y: number) => <polygon points={`${x},${y} ${x - 2},${y - 3} ${x + 2},${y - 3}`} fill={c} />; // Top notch
     const NR = (x: number, y: number) => <polygon points={`${x},${y} ${x + 3},${y - 2} ${x + 3},${y + 2}`} fill={c} />; // Right notch
@@ -657,8 +725,195 @@ const PatSVG: FC<PatSVGProps> = ({ shape }): ReactElement => {
                 {N(50, 15)} {DH(30, 70)} {DH(70, 70)}
             </svg>
         ),
+        buba_front: (
+            <svg viewBox="0 0 120 150" width="100" height="125">
+                <path d="M10,25 C 20,45 60,45 60,45 C 60,45 100,45 110,25 L115,140 L5,140 Z" fill={f} stroke={c} strokeWidth="2" strokeLinejoin="round" />
+            </svg>
+        ),
+        buba_back: (
+            <svg viewBox="0 0 120 150" width="100" height="125">
+                <path d="M10,25 C 20,25 60,25 60,25 C 60,25 100,25 110,25 L115,140 L5,140 Z" fill={f} stroke={c} strokeWidth="2" strokeLinejoin="round" />
+            </svg>
+        ),
+        belt: (
+            <svg viewBox="0 0 160 30" width="130" height="25">
+                <rect x="10" y="10" width="140" height="10" fill={f} stroke={c} strokeWidth="2" />
+            </svg>
+        ),
     };
     return shapes[shape] ?? shapes.front_bodice;
+};
+
+/* ═══════════════════════════════════════════
+   HELPERS FOR ASSEMBLY LAYOUTS
+═══════════════════════════════════════════ */
+
+// Exploded position — pieces spread out from center
+const getPieceLayout = (shape: PatternShape, index: number): { x: number, y: number, z: number, rx: number, ry: number, rz: number } => {
+    let x = 0, y = 0, z = 0, rx = 0, ry = 0, rz = 0;
+
+    switch (shape) {
+        case "front_bodice": case "buba_front": case "agbada_outer":
+            z = 40; break;
+        case "back_bodice": case "buba_back": case "agbada_inner":
+            z = -40; ry = 180; break;
+        case "side_panel":
+            x = index % 2 === 0 ? -60 : 60; ry = index % 2 === 0 ? -90 : 90; break;
+        case "sleeve": case "buba_sleeve": case "upper_sleeve": case "under_sleeve":
+            x = index % 2 === 0 ? -130 : 130; y = 20; ry = index % 2 === 0 ? -40 : 40; break;
+        case "sleeve_cuff":
+            x = index % 2 === 0 ? -160 : 160; y = 90; ry = index % 2 === 0 ? -40 : 40; break;
+        case "collar": case "undercollar": case "top_collar":
+            y = -90; z = 20; rx = -30; break;
+        case "front_facing": case "lapel_facing": case "placket":
+            y = -20; z = 55; break;
+        case "back_facing":
+            y = -60; z = -30; ry = 180; break;
+        case "trouser_front": case "skirt_panel":
+            y = 110; z = 30; x = index % 2 === 0 ? -45 : 45; break;
+        case "trouser_back":
+            y = 110; z = -30; x = index % 2 === 0 ? -45 : 45; ry = 180; break;
+        case "waistband": case "belt":
+            y = 40; z = 65; break;
+        case "fly_shield":
+            y = 65; z = 40; break;
+        case "pocket": case "pocket_bag": case "pocket_welt": case "pocket_flap":
+            x = index % 2 === 0 ? -45 : 45; y = 55; z = 65; break;
+        case "embroidery_panel":
+            y = -20; z = 65; break;
+        case "kente_strip":
+            x = (index % 5) * 35 - 70; y = 0; z = 40; break;
+        case "gele_tie":
+            y = -130; z = 0; rx = 10; break;
+        case "wrapper_panel":
+            y = 90; z = 50; rx = 10; break;
+        case "yoke_back":
+            y = -55; z = -20; ry = 180; break;
+    }
+    return { x, y, z, rx, ry, rz };
+};
+
+// Assembled position — pieces sit on the body in their anatomical location
+const getAssembledPosition = (shape: PatternShape, index: number): { x: number, y: number, z: number, rx: number, ry: number, rz: number, scale: number, opacity: number } => {
+    let x = 0, y = 0, z = 0, rx = 0, ry = 0, rz = 0, scale = 1, opacity = 1;
+
+    switch (shape) {
+        // ── Front torso pieces (z-forward, full opacity)
+        case "front_bodice": case "buba_front":
+            z = 4; scale = 1.05; opacity = 1; break;
+        case "agbada_outer":
+            z = 8; scale = 1.3; opacity = 0.95; break;
+
+        // ── Back torso (slightly behind, de-saturated)
+        case "back_bodice": case "buba_back":
+            z = -4; ry = 180; scale = 1.0; opacity = 0.75; break;
+        case "agbada_inner":
+            z = -6; ry = 180; scale = 1.0; opacity = 0.7; break;
+
+        // ── Side panels
+        case "side_panel":
+            x = index % 2 === 0 ? -10 : 10; z = 2; ry = index % 2 === 0 ? -12 : 12; scale = 0.9; opacity = 0.85; break;
+
+        // ── Sleeves
+        case "sleeve": case "buba_sleeve":
+            x = index % 2 === 0 ? -95 : 95; y = -10; ry = index % 2 === 0 ? -18 : 18; z = 2; scale = 0.95; opacity = 1; break;
+        case "upper_sleeve":
+            x = index % 2 === 0 ? -90 : 90; y = -8; z = 3; ry = index % 2 === 0 ? -15 : 15; scale = 0.95; opacity = 1; break;
+        case "under_sleeve":
+            x = index % 2 === 0 ? -88 : 88; y = -6; z = 1; ry = index % 2 === 0 ? -15 : 15; scale = 0.9; opacity = 0.8; break;
+        case "sleeve_cuff":
+            x = index % 2 === 0 ? -100 : 100; y = 80; z = 2; ry = index % 2 === 0 ? -15 : 15; scale = 0.85; opacity = 1; break;
+
+        // ── Collar / neckline
+        case "collar": case "top_collar":
+            y = -78; z = 5; rx = -20; scale = 0.9; opacity = 1; break;
+        case "undercollar":
+            y = -76; z = 3; rx = -20; scale = 0.88; opacity = 0.75; break;
+        case "front_facing": case "lapel_facing":
+            y = -30; z = 5; scale = 0.88; opacity = 0.9; break;
+        case "back_facing":
+            y = -50; z = -3; ry = 180; scale = 0.85; opacity = 0.7; break;
+        case "placket":
+            y = 0; z = 5; scale = 0.8; opacity = 0.9; break;
+
+        // ── Lower body
+        case "trouser_front": case "skirt_panel":
+            y = 105; z = 3; x = index % 2 === 0 ? -25 : 25; scale = 1.0; opacity = 1; break;
+        case "trouser_back":
+            y = 105; z = -3; x = index % 2 === 0 ? -25 : 25; ry = 180; scale = 1.0; opacity = 0.75; break;
+        case "waistband": case "belt":
+            y = 38; z = 6; scale = 1.0; opacity = 1; break;
+        case "fly_shield":
+            y = 50; z = 5; scale = 0.85; opacity = 0.9; break;
+
+        // ── Pockets & small details
+        case "pocket": case "pocket_flap":
+            x = index % 2 === 0 ? -28 : 28; y = 20; z = 6; scale = 0.75; opacity = 1; break;
+        case "pocket_bag":
+            x = index % 2 === 0 ? -28 : 28; y = 22; z = 4; scale = 0.7; opacity = 0.7; break;
+        case "pocket_welt":
+            x = index % 2 === 0 ? -28 : 28; y = 18; z = 6; scale = 0.75; opacity = 0.9; break;
+
+        // ── Embellishments
+        case "embroidery_panel":
+            y = -15; z = 7; scale = 0.8; opacity = 0.95; break;
+        case "kente_strip":
+            x = (index % 5) * 18 - 36; y = 0; z = 6; scale = 0.8; opacity = 0.9; break;
+        case "gele_tie":
+            y = -115; z = 2; rx = -5; scale = 1.0; opacity = 1; break;
+        case "wrapper_panel":
+            y = 88; z = 4; rx = 5; scale = 1.05; opacity = 0.95; break;
+        case "yoke_back":
+            y = -48; z = -2; ry = 180; scale = 0.9; opacity = 0.7; break;
+    }
+    return { x, y, z, rx, ry, rz, scale, opacity };
+};
+
+// Colour palette for piece legend badges
+const BADGE_COLORS = [
+    "#C14B1A","#D4A017","#2D6A4F","#4A8FD4","#8B0000","#5C3A8A",
+    "#8A2B3D","#3B7A68","#7A3B46","#8A6B4E","#9B1B30","#1A3B8A",
+] as const;
+
+// Callout positions mapped to body regions (percentage offsets on the garment illustration)
+const getCalloutPos = (shape: PatternShape, idx: number): { top: string, left: string } => {
+    const map: Partial<Record<PatternShape, { top: string, left: string }>> = {
+        front_bodice:    { top: "38%", left: "50%" },
+        buba_front:      { top: "38%", left: "50%" },
+        back_bodice:     { top: "38%", left: "75%" },
+        buba_back:       { top: "38%", left: "75%" },
+        side_panel:      { top: "45%", left: idx % 2 === 0 ? "20%" : "80%" },
+        sleeve:          { top: "45%", left: idx % 2 === 0 ? "15%" : "85%" },
+        buba_sleeve:     { top: "45%", left: idx % 2 === 0 ? "15%" : "85%" },
+        upper_sleeve:    { top: "42%", left: idx % 2 === 0 ? "12%" : "88%" },
+        under_sleeve:    { top: "50%", left: idx % 2 === 0 ? "12%" : "88%" },
+        sleeve_cuff:     { top: "62%", left: idx % 2 === 0 ? "12%" : "88%" },
+        collar:          { top: "18%", left: "50%" },
+        undercollar:     { top: "16%", left: "50%" },
+        top_collar:      { top: "18%", left: "50%" },
+        front_facing:    { top: "28%", left: "38%" },
+        lapel_facing:    { top: "30%", left: "36%" },
+        back_facing:     { top: "22%", left: "68%" },
+        placket:         { top: "32%", left: "50%" },
+        trouser_front:   { top: "72%", left: idx % 2 === 0 ? "38%" : "62%" },
+        trouser_back:    { top: "72%", left: idx % 2 === 0 ? "30%" : "70%" },
+        skirt_panel:     { top: "70%", left: idx % 2 === 0 ? "38%" : "62%" },
+        waistband:       { top: "58%", left: "50%" },
+        belt:            { top: "58%", left: "50%" },
+        fly_shield:      { top: "63%", left: "50%" },
+        pocket:          { top: "48%", left: idx % 2 === 0 ? "32%" : "68%" },
+        pocket_bag:      { top: "50%", left: idx % 2 === 0 ? "30%" : "70%" },
+        pocket_flap:     { top: "46%", left: idx % 2 === 0 ? "32%" : "68%" },
+        pocket_welt:     { top: "44%", left: idx % 2 === 0 ? "32%" : "68%" },
+        embroidery_panel:{ top: "30%", left: "50%" },
+        kente_strip:     { top: "40%", left: `${30 + (idx % 5) * 10}%` },
+        gele_tie:        { top: "8%",  left: "50%" },
+        wrapper_panel:   { top: "75%", left: "50%" },
+        yoke_back:       { top: "25%", left: "72%" },
+        agbada_outer:    { top: "35%", left: "50%" },
+        agbada_inner:    { top: "35%", left: "68%" },
+    };
+    return map[shape] ?? { top: `${20 + (idx * 7) % 60}%`, left: `${30 + (idx * 11) % 40}%` };
 };
 /* ═══════════════════════════════════════════
    DATA
@@ -901,6 +1156,36 @@ export default function AtelierApp(): ReactElement {
     const [openPiece, setOpenPiece] = useState<string | null>(null);
     const [printOpen, setPrintOpen] = useState(false);
     const [tab, setTab] = useState<"gallery" | "guide">("gallery");
+    const [modTab, setModTab] = useState<"details" | "asm2d" | "asm3d">("details");
+
+    // 3D Controls
+    const [rotX, setRotX] = useState(-15);
+    const [rotY, setRotY] = useState(25);
+    const [isDragging, setIsDragging] = useState(false);
+    const [startPos, setStartPos] = useState({ x: 0, y: 0 });
+    // expState: -1 = assembled on body, 0 = flat stack, 1 = normal explode, 2 = max explode
+    const [expState, setExpState] = useState<-1 | 0 | 1 | 2>(-1);
+    const [mat3d, setMat3d] = useState<"paper" | "fabric">("fabric"); // Material toggle
+
+    const handlePointerDown = (e: React.PointerEvent) => {
+        setIsDragging(true);
+        setStartPos({ x: e.clientX, y: e.clientY });
+        (e.target as HTMLElement).setPointerCapture(e.pointerId);
+    };
+
+    const handlePointerMove = (e: React.PointerEvent) => {
+        if (!isDragging) return;
+        const dx = e.clientX - startPos.x;
+        const dy = e.clientY - startPos.y;
+        setRotY(prev => prev + dx * 0.5);
+        setRotX(prev => Math.max(-80, Math.min(80, prev - dy * 0.5)));
+        setStartPos({ x: e.clientX, y: e.clientY });
+    };
+
+    const handlePointerUp = (e: React.PointerEvent) => {
+        setIsDragging(false);
+        (e.target as HTMLElement).releasePointerCapture(e.pointerId);
+    };
 
     const filtered = STYLES.filter(s => {
         if (cat !== "All" && s.category !== cat) return false;
@@ -914,6 +1199,23 @@ export default function AtelierApp(): ReactElement {
     return (
         <>
             <style>{CSS}</style>
+
+            {/* SVG TEXTURE FILTERS */}
+            <svg width="0" height="0" style={{ position: 'absolute' }}>
+                <defs>
+                    <filter id="paper-texture" x="-10%" y="-10%" width="120%" height="120%">
+                        <feTurbulence type="fractalNoise" baseFrequency="0.04" numOctaves="3" result="noise" />
+                        <feColorMatrix type="matrix" values="1 0 0 0 0.85   0 1 0 0 0.8   0 0 1 0 0.7   0 0 0 0.15 0" in="noise" result="coloredNoise" />
+                        <feBlend in="SourceGraphic" in2="coloredNoise" mode="multiply" />
+                    </filter>
+                    <filter id="fab-texture" x="-10%" y="-10%" width="120%" height="120%">
+                        <feTurbulence type="fractalNoise" baseFrequency="0.6" numOctaves="1" result="noise" />
+                        <feColorMatrix type="matrix" values="1 0 0 0 0   0 1 0 0 0   0 0 1 0 0   0 0 0 0.12 0" in="noise" result="alphaNoise" />
+                        <feBlend in="SourceGraphic" in2="alphaNoise" mode="multiply" />
+                    </filter>
+                </defs>
+            </svg>
+
             <div className="kente" style={{ position: "fixed", top: 0, left: 0, right: 0, zIndex: 400 }} />
 
             <header className="hdr" style={{ top: 3 }}>
@@ -986,12 +1288,12 @@ export default function AtelierApp(): ReactElement {
                         ))}
                     </div>
 
-                    <div className="layout">
+                    <div className="layout" style={{ display: 'block' }}>
                         <div className="gallery">
                             {filtered.map((style, idx) => (
-                                <div key={style.id} className={`card${sel?.id === style.id ? " sel" : ""}`}
+                                <div key={style.id} className="card"
                                     style={{ animationDelay: `${idx * .05}s` }}
-                                    onClick={() => { setSel(style); setOpenPiece(null); }}>
+                                    onClick={() => { setSel(style); setOpenPiece(null); setModTab("details"); }}>
                                     <div className="card-ill">
                                         <span className={`diff-pill ${style.difficulty}`}>{style.difficulty}</span>
                                         <span className="origin-pill">{style.origin}</span>
@@ -1012,68 +1314,247 @@ export default function AtelierApp(): ReactElement {
                                 </div>
                             )}
                         </div>
-                        <div className={`dpanel${sel ? " active" : ""}`}>
-                            {sel ? (
-                                <>
-                                    <div className="dp-stage">
-                                        <span className="stage-label">{sel.pieces.length} PIECES</span>
-                                        <GarmentIllustration type={sel.garmentType} accent={sel.accent} bg={sel.bg} size="panel" />
-                                    </div>
-                                    <div className="dp-hdr">
-                                        <div className="dp-eyebrow">{sel.category} · {sel.region}</div>
-                                        <div className="dp-title">{sel.name}</div>
-                                        <div className="dp-desc">"{sel.desc}"</div>
-                                    </div>
-                                    <div className="dp-sec">
-                                        <div className="sec-hd">Measurements</div>
-                                        <div className="mgrid">
-                                            {Object.entries(sel.measurements).map(([k, v]) => (
-                                                <div key={k} className="mitem">
-                                                    <div className="mlbl">{k}</div>
-                                                    <div className="mval">{v}</div>
-                                                </div>
-                                            ))}
-                                        </div>
-                                    </div>
-                                    <div className="dp-sec">
-                                        <div className="sec-hd">Pattern Pieces</div>
-                                        <div className="plist">
-                                            {sel.pieces.map((p, idx) => (
-                                                <div key={p.id} className={`pitem ${openPiece === p.id ? "open" : ""}`}>
-                                                    <div className="phdr" onClick={() => setOpenPiece(openPiece === p.id ? null : p.id)}>
-                                                        <div className="pnum">{idx + 1}</div>
-                                                        <div className="pname">{p.name}</div>
-                                                        <div className="pdim">×{p.qty} · {p.dims}</div>
-                                                        <button className={`parr ${openPiece === p.id ? "open" : ""}`}>▼</button>
+                    </div >
+                </>
+            )}
+
+            {/* FULL SCREEN MODAL */}
+            {sel && (
+                <div className="vmod-ov">
+                    <div className="vmod-box">
+                        <div className="vmod-hdr">
+                            <div>
+                                <div className="dp-eyebrow" style={{ marginBottom: 4 }}>{sel.category} · {sel.region}</div>
+                                <div className="vmod-title">{sel.name}</div>
+                            </div>
+                            <button className="vmod-close" onClick={() => setSel(null)}>×</button>
+                        </div>
+                        <div className="vmod-tabs">
+                            <button className={`vmod-tab ${modTab === "details" ? "on" : ""}`} onClick={() => setModTab("details")}>Details & Specs</button>
+                            <button className={`vmod-tab ${modTab === "asm2d" ? "on" : ""}`} onClick={() => setModTab("asm2d")}>2D Flat-Lay Map</button>
+                            <button className={`vmod-tab ${modTab === "asm3d" ? "on" : ""}`} onClick={() => { setModTab("asm3d"); setRotX(-15); setRotY(25); setExpState(-1); }}>3D Assembly View</button>
+                        </div>
+                        <div className="vmod-body">
+                            {modTab === "details" && (
+                                <div className="vmod-cnt">
+                                    <div className="vmod-det-grid">
+                                        <div className="vmod-det-left">
+                                            <div className="vmod-eb">Information</div>
+                                            <div className="vmod-desc">"{sel.desc}"</div>
+                                            <div className="vmod-eb" style={{ marginTop: '2rem' }}>Measurements Base</div>
+                                            <div className="mgrid">
+                                                {Object.entries(sel.measurements).map(([k, v]) => (
+                                                    <div key={k} className="mitem">
+                                                        <div className="mlbl">{k}</div>
+                                                        <div className="mval">{v}</div>
                                                     </div>
-                                                    <div className={`pbody ${openPiece === p.id ? "show" : ""}`}>
-                                                        <div className="patbox">
-                                                            <div className="patgrid" />
-                                                            <div style={{ position: "relative", zIndex: 2 }}><PatSVG shape={p.shape} /></div>
+                                                ))}
+                                            </div>
+                                            <div style={{ marginTop: '3rem' }}>
+                                                <button className="btn-primary" onClick={() => setPrintOpen(true)}>Print A4 Patterns</button>
+                                            </div>
+                                        </div>
+                                        <div className="vmod-det-right">
+                                            <div className="vmod-eb">Pattern Pieces ({sel.pieces.length})</div>
+                                            <div className="plist">
+                                                {sel.pieces.map((p, idx) => (
+                                                    <div key={p.id} className={`pitem ${openPiece === p.id ? "open" : ""}`}>
+                                                        <div className="phdr" onClick={() => setOpenPiece(openPiece === p.id ? null : p.id)}>
+                                                            <div className="pnum">{idx + 1}</div>
+                                                            <div className="pname">{p.name}</div>
+                                                            <div className="pdim">×{p.qty} · {p.dims}</div>
+                                                            <button className={`parr ${openPiece === p.id ? "open" : ""}`}>▼</button>
                                                         </div>
-                                                        <div className="nlbl">Cutting Notes</div>
-                                                        <ul className="nlist">{p.notes.map(n => <li key={n}>{n}</li>)}</ul>
-                                                        <div className="slbl">Assembly Order</div>
-                                                        <ul className="slist">{p.instructions.map(n => <li key={n}>{n}</li>)}</ul>
+                                                        <div className={`pbody ${openPiece === p.id ? "show" : ""}`}>
+                                                            <div className="patbox" style={{ height: 180 }}>
+                                                                <div className="patgrid" />
+                                                                <div style={{ position: "relative", zIndex: 2 }}><PatSVG shape={p.shape} theme="paper" /></div>
+                                                            </div>
+                                                            <div className="nlbl">Notes</div>
+                                                            <ul className="nlist">{p.notes.map(n => <li key={n}>{n}</li>)}</ul>
+                                                            <div className="slbl">Assembly Order</div>
+                                                            <ul className="slist">{p.instructions.map(n => <li key={n}>{n}</li>)}</ul>
+                                                        </div>
                                                     </div>
-                                                </div>
-                                            ))}
+                                                ))}
+                                            </div>
                                         </div>
                                     </div>
-                                    <div className="dp-actions">
-                                        <button className="bact out" onClick={() => setSel(null)}>Back to Gallery</button>
-                                        <button className="bact sol" onClick={() => setPrintOpen(true)}>Print All Pieces (A4)</button>
+                                </div>
+                            )}
+
+                            {modTab === "asm2d" && (
+                                <div className="asm-2d">
+                                    {/* Central garment illustration */}
+                                    <div className="asm-2d-center">
+                                        <div className="asm-2d-title">Assembled Flat-Lay · {sel.pieces.length} Pattern Pieces</div>
+                                        <div className="asm-garment-wrap" style={{ position: 'relative' }}>
+                                            <GarmentIllustration type={sel.garmentType} accent={sel.accent} bg={sel.bg} size="panel" />
+                                            {/* Callout badges overlaid on the illustration */}
+                                            {sel.pieces.map((p, i) => {
+                                                const pos = getCalloutPos(p.shape, i);
+                                                const color = BADGE_COLORS[i % BADGE_COLORS.length];
+                                                return (
+                                                    <div key={p.id} className="asm-callout"
+                                                        title={p.name}
+                                                        style={{ background: color, top: pos.top, left: pos.left, transform: 'translate(-50%,-50%)' }}>
+                                                        {i + 1}
+                                                    </div>
+                                                );
+                                            })}
+                                        </div>
+                                        <div style={{ marginTop: '1rem', fontFamily: 'DM Mono', fontSize: '.5rem', letterSpacing: '.14em', textTransform: 'uppercase', color: 'var(--muted)', textAlign: 'center' }}>
+                                            Badge numbers correspond to pattern pieces →
+                                        </div>
                                     </div>
-                                </>
-                            ) : (
-                                <div className="dp-empty">
-                                    <div style={{ width: 60, height: 60, border: "1px solid var(--border)", borderRadius: "50%", display: "flex", alignItems: "center", justifyContent: "center", color: "var(--muted)", fontFamily: "Playfair Display", fontSize: "1.5rem", fontWeight: 700 }}>A</div>
-                                    <p>Select a garment from the library<br />to inspect its flat pattern pieces,<br />measurements, and construction<br />details.</p>
+
+                                    {/* Right legend panel */}
+                                    <div className="asm-legend">
+                                        <div className="asm-legend-hdr">Pattern Pieces · {sel.name}</div>
+                                        {sel.pieces.map((p, i) => {
+                                            const color = BADGE_COLORS[i % BADGE_COLORS.length];
+                                            return (
+                                                <div key={p.id} className="asm-leg-item">
+                                                    <div className="asm-leg-badge" style={{ background: color }}>{i + 1}</div>
+                                                    <div className="asm-leg-info">
+                                                        <div className="asm-leg-name">{p.name}</div>
+                                                        <div className="asm-leg-dim">×{p.qty} · {p.dims}</div>
+                                                    </div>
+                                                    <div className="asm-leg-svg">
+                                                        <PatSVG shape={p.shape} theme="fabric" fabricColor={color} />
+                                                    </div>
+                                                </div>
+                                            );
+                                        })}
+                                    </div>
+                                </div>
+                            )}
+
+                            {modTab === "asm3d" && (
+                                <div className="asm-3d-wrap" onPointerDown={handlePointerDown} onPointerMove={handlePointerMove} onPointerUp={handlePointerUp}>
+                                    <div className="asm-3d-scene" style={{ transform: `rotateX(${rotX}deg) rotateY(${rotY}deg)` }}>
+
+                                        {/* Ground plane grid */}
+                                        <div style={{ position: 'absolute', top: '50%', left: '50%', width: 500, height: 500, transform: 'translate(-50%,-50%) rotateX(90deg)', pointerEvents: 'none' }}>
+                                            <div style={{ width: '100%', height: '100%', backgroundImage: 'linear-gradient(rgba(212,160,23,0.07) 1px, transparent 1px), linear-gradient(90deg, rgba(212,160,23,0.07) 1px, transparent 1px)', backgroundSize: '50px 50px', borderRadius: '50%', background: 'radial-gradient(circle, rgba(212,160,23,0.04) 0%, transparent 70%)' }} />
+                                        </div>
+
+                                        {/* Body-form silhouette (assembled mode only) */}
+                                        {expState === -1 && (
+                                            <div className="asm-body-form">
+                                                <svg viewBox="0 0 200 420" width="140" height="294" opacity="0.9">
+                                                    {/* Head */}
+                                                    <ellipse cx="100" cy="36" rx="28" ry="33" fill="none" stroke="rgba(212,160,23,0.5)" strokeWidth="1.5" />
+                                                    {/* Neck */}
+                                                    <rect x="90" y="68" width="20" height="22" rx="4" fill="none" stroke="rgba(212,160,23,0.4)" strokeWidth="1.2" />
+                                                    {/* Shoulders */}
+                                                    <path d="M28,90 Q48,82 90,88 L110,88 Q152,82 172,90 L175,145 L25,145 Z" fill="rgba(212,160,23,0.06)" stroke="rgba(212,160,23,0.4)" strokeWidth="1.5" />
+                                                    {/* Torso */}
+                                                    <path d="M30,140 L170,140 L162,250 L38,250 Z" fill="rgba(212,160,23,0.05)" stroke="rgba(212,160,23,0.35)" strokeWidth="1.5" />
+                                                    {/* Left arm */}
+                                                    <path d="M30,92 C8,105 4,155 10,205 L30,205 C28,160 32,118 48,105 Z" fill="rgba(212,160,23,0.04)" stroke="rgba(212,160,23,0.3)" strokeWidth="1" />
+                                                    {/* Right arm */}
+                                                    <path d="M170,92 C192,105 196,155 190,205 L170,205 C172,160 168,118 152,105 Z" fill="rgba(212,160,23,0.04)" stroke="rgba(212,160,23,0.3)" strokeWidth="1" />
+                                                    {/* Hip/waist */}
+                                                    <path d="M38,248 L162,248 L168,290 L32,290 Z" fill="rgba(212,160,23,0.05)" stroke="rgba(212,160,23,0.35)" strokeWidth="1.5" />
+                                                    {/* Legs */}
+                                                    <path d="M35,290 L95,290 L90,410 L45,410 Z" fill="rgba(212,160,23,0.04)" stroke="rgba(212,160,23,0.3)" strokeWidth="1" />
+                                                    <path d="M105,290 L165,290 L155,410 L110,410 Z" fill="rgba(212,160,23,0.04)" stroke="rgba(212,160,23,0.3)" strokeWidth="1" />
+                                                    {/* Center line */}
+                                                    <line x1="100" y1="68" x2="100" y2="290" stroke="rgba(212,160,23,0.2)" strokeWidth="0.8" strokeDasharray="4,4" />
+                                                </svg>
+                                            </div>
+                                        )}
+
+                                        {sel.pieces.map((p, i) => {
+                                            const isAssembled = expState === -1;
+                                            const loc = isAssembled
+                                                ? getAssembledPosition(p.shape, i)
+                                                : getPieceLayout(p.shape, i);
+
+                                            const distMultiplier = expState === 0 ? 0.05 : expState === 1 ? 1.0 : 2.5;
+
+                                            let tx: number, ty: number, tz: number;
+                                            let actualRotX: number, actualRotY: number, actualRotZ: number;
+                                            let pieceScale = 1;
+                                            let pieceOpacity = 1;
+
+                                            if (isAssembled) {
+                                                const apos = loc as ReturnType<typeof getAssembledPosition>;
+                                                tx = apos.x;
+                                                ty = apos.y;
+                                                tz = apos.z;
+                                                actualRotX = apos.rx;
+                                                actualRotY = apos.ry;
+                                                actualRotZ = apos.rz;
+                                                pieceScale = apos.scale;
+                                                pieceOpacity = apos.opacity;
+                                            } else {
+                                                const eloc = loc as ReturnType<typeof getPieceLayout>;
+                                                const flatZOffset = expState === 0 ? i * 1.2 : 0;
+                                                actualRotX = expState === 0 ? 0 : eloc.rx;
+                                                actualRotY = expState === 0 ? 0 : eloc.ry;
+                                                actualRotZ = expState === 0 ? 0 : eloc.rz;
+                                                tx = eloc.x * distMultiplier;
+                                                ty = eloc.y * distMultiplier;
+                                                tz = eloc.z * distMultiplier * 1.5 + flatZOffset;
+                                            }
+
+                                            // Thread lines between pieces in exploded mode
+                                            const showThread = !isAssembled && expState > 0 && i > 0;
+                                            const prevLoc = i > 0 ? getPieceLayout(sel.pieces[i - 1].shape, i - 1) : getPieceLayout(p.shape, i);
+                                            const prevTz = prevLoc.z * distMultiplier * 1.5;
+                                            const threadLen = Math.max(10, Math.abs(tz - prevTz));
+
+                                            const isAssembledMode = expState === -1;
+
+                                            return (
+                                                <React.Fragment key={p.id}>
+                                                    {showThread && (
+                                                        <div className="asm-thread" style={{
+                                                            height: threadLen,
+                                                            transform: `translate3d(calc(-50% + ${tx}px), calc(-50% + ${ty}px), ${prevTz}px) rotateX(90deg)`
+                                                        }} />
+                                                    )}
+                                                    <div
+                                                        className={`asm-3d-item ${mat3d === "fabric" || isAssembledMode ? "fab-mat" : ""} ${isAssembledMode ? "assembled-mode" : ""}`}
+                                                        style={{
+                                                            transform: `translate3d(calc(-50% + ${tx}px), calc(-50% + ${ty}px), ${tz}px) rotateX(${actualRotX}deg) rotateY(${actualRotY}deg) rotateZ(${actualRotZ}deg) scale(${pieceScale})`,
+                                                            opacity: pieceOpacity,
+                                                            transition: 'transform 0.7s cubic-bezier(0.2, 0.8, 0.2, 1), opacity 0.5s ease'
+                                                        }}
+                                                    >
+                                                        <PatSVG shape={p.shape} theme={mat3d === "fabric" || isAssembledMode ? "fabric" : "paper"} fabricColor={sel.accent} />
+                                                        {/* Label only in exploded modes */}
+                                                        {!isAssembledMode && expState > 0 && (
+                                                            <div style={{ position: 'absolute', bottom: -16, color: 'rgba(255,255,255,0.85)', fontSize: 9, fontFamily: 'DM Mono', whiteSpace: 'nowrap', background: 'rgba(0,0,0,0.6)', padding: '2px 5px', borderRadius: 2, transform: `rotateY(${-actualRotY}deg)`, letterSpacing: '0.06em' }}>
+                                                                {p.id}
+                                                            </div>
+                                                        )}
+                                                    </div>
+                                                </React.Fragment>
+                                            );
+                                        })}
+                                    </div>
+
+                                    <div className="asm-3d-hud">
+                                        {expState === -1 ? "Assembled Outfit" : expState === 0 ? "Flat Stack" : "Exploded View"} · {sel.pieces.length} Pieces<br />
+                                        <span style={{ color: 'var(--gold)' }}>Drag to Rotate</span>
+                                    </div>
+
+                                    <div className="asm-3d-ctrls">
+                                        <button className={`asm-btn${expState === -1 ? " active" : ""}`} onClick={(e) => { e.stopPropagation(); setExpState(-1); }}>👗 Assembled</button>
+                                        <button className={`asm-btn${expState === 0 ? " active" : ""}`} onClick={(e) => { e.stopPropagation(); setExpState(0); }}>Flat Stack</button>
+                                        <button className={`asm-btn${expState === 1 ? " active" : ""}`} onClick={(e) => { e.stopPropagation(); setExpState(1); }}>Explode</button>
+                                        <button className={`asm-btn${expState === 2 ? " active" : ""}`} onClick={(e) => { e.stopPropagation(); setExpState(2); }}>Max Explode</button>
+                                        <button className="asm-btn" onClick={(e) => { e.stopPropagation(); setMat3d(m => m === "paper" ? "fabric" : "paper"); }} style={{ borderColor: 'var(--gold)', background: 'rgba(212,160,23,0.2)' }}>Fabric: {mat3d.toUpperCase()}</button>
+                                        <button className="asm-btn" onClick={(e) => { e.stopPropagation(); setRotX(-15); setRotY(25); }}>Reset</button>
+                                    </div>
                                 </div>
                             )}
                         </div>
-                    </div >
-                </>
+                    </div>
+                </div>
             )}
 
             {

@@ -16,6 +16,19 @@
   --shadow: 0 20px 60px rgba(14, 12, 9, 0.18);
 }
 
+:root.dark {
+  --ink: #F7F2E8;
+  --parchment: #121212;
+  --warm: #1A1A1A;
+  --rust: #E05F25;
+  --gold: #EAC248;
+  --light: #2A2A2A;
+  --muted: #A99B86;
+  --panel: #1E1E1E;
+  --border: rgba(232, 223, 200, 0.15);
+  --shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+}
+
 * {
   box-sizing: border-box;
   margin: 0;

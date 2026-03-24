@@ -1,4 +1,4 @@
-import React, { useState, type FC, type ReactElement } from "react";
+import React, { useState, useRef, useEffect, type FC, type ReactElement } from "react";
 
 /* ═══════════════════════════════════════════
    TYPES
@@ -50,6 +50,18 @@ const CSS = `
   --gold:#D4A017;--gold2:#F0C040;--rust:#C14B1A;--sage:#2D6A4F;
   --cream:#1A1510;--muted:#8C7D6B;--text:#2C241B;--subtext:#5C4D3C;
 }
+:root.dark {
+  --bg:#121212;--surface:#1A1A1A;--card:#242424;
+  --border:rgba(212,160,23,0.15);--border2:rgba(212,160,23,0.3);
+  --cream:#FDFBF7;--muted:#9A8D7C;--text:#EAEAEA;--subtext:#AAA096;
+}
+:root.dark .ill-float svg *[opacity="0.1"] { opacity: 0.45 !important; }
+:root.dark .ill-float svg *[opacity="0.12"] { opacity: 0.5 !important; }
+:root.dark .ill-float svg *[opacity="0.15"] { opacity: 0.55 !important; }
+:root.dark .ill-float svg *[opacity="0.2"] { opacity: 0.6 !important; }
+:root.dark .ill-float svg *[opacity="0.25"] { opacity: 0.65 !important; }
+:root.dark .ill-float svg *[opacity="0.3"] { opacity: 0.7 !important; }
+:root.dark .ill-float svg *[opacity="0.4"] { opacity: 0.8 !important; }
 html,body{background:var(--bg);color:var(--text);font-family:'Outfit',sans-serif;overflow-x:hidden;}
 ::-webkit-scrollbar{width:4px;}
 ::-webkit-scrollbar-track{background:var(--surface);}
@@ -164,6 +176,9 @@ html,body{background:var(--bg);color:var(--text);font-family:'Outfit',sans-serif
 @keyframes fadeUp{from{opacity:0;transform:translateY(20px);}to{opacity:1;transform:translateY(0);}}
 @keyframes float{0%,100%{transform:translateY(0);}50%{transform:translateY(-6px);}}
 .ill-float{animation:float 4s ease-in-out infinite;}
+@keyframes callout-pulse{0%{box-shadow:0 0 0 0 rgba(212,160,23,0.55);}70%{box-shadow:0 0 0 8px rgba(212,160,23,0);}100%{box-shadow:0 0 0 0 rgba(212,160,23,0);}}
+.asm-callout.hi{animation:callout-pulse 1.4s ease-in-out infinite;border-color:var(--gold) !important;transform:translate(-50%,-50%) scale(1.25) !important;z-index:20;}
+.asm-leg-item.hi{background:rgba(212,160,23,0.1) !important;border-left:3px solid var(--gold);}
 
 /* ═══════════════════════════════════════════
    PATTERN MODAL (NEW)
@@ -189,12 +204,12 @@ html,body{background:var(--bg);color:var(--text);font-family:'Outfit',sans-serif
 .vmod-det-right{}
 
 /* ——— Assembly 2D — Tailor's Flat-Lay ——— */
-.asm-2d{height:100%;display:flex;align-items:stretch;background:linear-gradient(160deg,#F9F5ED 0%,#F0EBE0 100%);position:relative;overflow:hidden;}
-.asm-2d::before{content:'';position:absolute;inset:0;background-image:repeating-linear-gradient(0deg,rgba(0,0,0,0.03) 0px,rgba(0,0,0,0.03) 1px,transparent 1px,transparent 40px),repeating-linear-gradient(90deg,rgba(0,0,0,0.03) 0px,rgba(0,0,0,0.03) 1px,transparent 1px,transparent 40px);pointer-events:none;}
+.asm-2d{height:100%;display:flex;align-items:stretch;background:linear-gradient(160deg, #1A3C34 0%, #0F2A22 100%);position:relative;overflow:hidden;}
+.asm-2d::before{content:'';position:absolute;inset:0;background-image:repeating-linear-gradient(0deg,rgba(255,255,255,0.08) 0px,rgba(255,255,255,0.08) 1px,transparent 1px,transparent 40px),repeating-linear-gradient(90deg,rgba(255,255,255,0.08) 0px,rgba(255,255,255,0.08) 1px,transparent 1px,transparent 40px);pointer-events:none;}
 .asm-2d-center{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;position:relative;padding:2rem;}
-.asm-2d-title{font-family:'DM Mono',monospace;font-size:.55rem;letter-spacing:.22em;text-transform:uppercase;color:var(--rust);margin-bottom:1.2rem;display:flex;align-items:center;gap:8px;}
-.asm-2d-title::before,.asm-2d-title::after{content:'';flex:1;height:1px;background:rgba(193,75,26,0.2);}
-.asm-garment-wrap{position:relative;background:rgba(255,255,255,0.7);border:1px solid rgba(0,0,0,0.06);border-radius:4px;box-shadow:0 8px 40px rgba(0,0,0,0.08);padding:1rem;backdrop-filter:blur(4px);}
+.asm-2d-title{font-family:'DM Mono',monospace;font-size:.55rem;letter-spacing:.22em;text-transform:uppercase;color:#E8E8E8;margin-bottom:1.2rem;display:flex;align-items:center;gap:8px;}
+.asm-2d-title::before,.asm-2d-title::after{content:'';flex:1;height:1px;background:rgba(255,255,255,0.2);}
+.asm-garment-wrap{position:relative;background:rgba(255,255,255,0.9);border:1px solid rgba(0,0,0,0.1);border-radius:4px;box-shadow:0 12px 64px rgba(0,0,0,0.4), 0 4px 16px rgba(0,0,0,0.2);padding:1rem;backdrop-filter:blur(4px);}
 .asm-callout{position:absolute;width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'DM Mono',monospace;font-size:.55rem;font-weight:700;color:#fff;border:2px solid rgba(255,255,255,0.8);box-shadow:0 2px 8px rgba(0,0,0,0.25);cursor:default;transition:transform .2s;z-index:5;}
 .asm-callout:hover{transform:scale(1.3);z-index:10;}
 .asm-callout-line{position:absolute;pointer-events:none;z-index:2;}
@@ -209,15 +224,15 @@ html,body{background:var(--bg);color:var(--text);font-family:'Outfit',sans-serif
 .asm-leg-svg{flex-shrink:0;opacity:.9;}
 
 /* ——— Assembly 3D ——— */
-.asm-3d-wrap{height:100%;width:100%;perspective:1400px;display:flex;align-items:center;justify-content:center;background:radial-gradient(ellipse 70% 60% at 50% 42%,#1a1530 0%,#050505 80%);position:relative;overflow:hidden;}
-.asm-3d-wrap::before{content:'';position:absolute;inset:0;background:radial-gradient(circle at 50% 40%, rgba(212,160,23,0.04) 0%,transparent 60%);pointer-events:none;}
-.asm-3d-scene{width:600px;height:800px;transform-style:preserve-3d;position:relative;transition:transform 0.1s linear;cursor:grab;}
+.asm-3d-wrap{height:100%;width:100%;perspective:1400px;display:flex;align-items:center;justify-content:center;background:radial-gradient(ellipse 70% 60% at 50% 42%,#201a35 0%,#000000 90%);position:relative;overflow:hidden;}
+.asm-3d-wrap::before{content:'';position:absolute;inset:0;background:radial-gradient(circle at 60% 30%, rgba(212,160,23,0.08) 0%,transparent 50%);pointer-events:none;}
+.asm-3d-scene{width:100%;max-width:600px;aspect-ratio:0.75;transform-style:preserve-3d;position:relative;transition:transform 0.1s linear;cursor:grab;}
 .asm-3d-scene:active{cursor:grabbing;}
 .asm-3d-item{position:absolute;top:50%;left:50%;transform-style:preserve-3d;display:flex;align-items:center;justify-content:center;transform:translate(-50%,-50%);transition:transform 0.65s cubic-bezier(0.2,0.8,0.2,1),opacity .4s;}
-.asm-3d-item svg{filter:url(#paper-texture) drop-shadow(0 2px 0 #c0a88a) drop-shadow(0 4px 0 #a08060) drop-shadow(0 24px 32px rgba(0,0,0,0.9));}
-.asm-3d-item.fab-mat svg{filter:url(#fab-texture) drop-shadow(0 2px 6px rgba(0,0,0,0.5)) drop-shadow(0 10px 30px rgba(0,0,0,0.9));}
-.asm-3d-item.assembled-mode svg{filter:url(#fab-texture) drop-shadow(0 2px 8px rgba(0,0,0,0.6)) drop-shadow(0 6px 20px rgba(0,0,0,0.7));}
-.asm-3d-item::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(255,255,255,0.12) 0%,transparent 40%,rgba(0,0,0,0.15) 100%);pointer-events:none;mix-blend-mode:overlay;z-index:10;border-radius:2px;}
+.asm-3d-item svg{filter:url(#paper-texture) drop-shadow(0 1px 0 #b09575) drop-shadow(0 2px 0 #907050) drop-shadow(0 3px 0 #705538) drop-shadow(0 20px 24px rgba(0,0,0,0.6));}
+.asm-3d-item.fab-mat svg{filter:url(#fab-texture) drop-shadow(0 1px 2px rgba(0,0,0,0.5)) drop-shadow(0 3px 6px rgba(0,0,0,0.7)) drop-shadow(0 12px 28px rgba(0,0,0,0.8));}
+.asm-3d-item.assembled-mode svg{filter:url(#fab-texture) drop-shadow(0 1px 3px rgba(0,0,0,0.6)) drop-shadow(0 4px 12px rgba(0,0,0,0.8));}
+.asm-3d-item::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(255,255,255,0.2) 0%,transparent 50%,rgba(0,0,0,0.3) 100%);pointer-events:none;mix-blend-mode:overlay;z-index:10;border-radius:2px;}
 .asm-body-form{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%) translateZ(0px);transform-style:preserve-3d;pointer-events:none;opacity:0.18;}
 .asm-3d-hud{position:absolute;bottom:2rem;left:2rem;color:rgba(255,255,255,0.6);font-family:'DM Mono',monospace;font-size:.6rem;letter-spacing:.1em;text-transform:uppercase;z-index:20;}
 .asm-3d-ctrls{position:absolute;bottom:2rem;right:2rem;display:flex;gap:.6rem;z-index:20;flex-wrap:wrap;justify-content:flex-end;}
@@ -249,6 +264,63 @@ html,body{background:var(--bg);color:var(--text);font-family:'Outfit',sans-serif
   .vmod-hdr{padding:1rem;}
   .vmod-tabs{padding:0;overflow-x:auto;}
   .vmod-cnt{padding:1rem;}
+
+  /* ── 2D Flat-Lay mobile: stack legend below ── */
+  .asm-2d { flex-direction: column; overflow-y: auto; }
+  .asm-2d-center { padding: 1rem .5rem .5rem; }
+  .asm-2d-title { font-size:.48rem; }
+  .asm-garment-wrap { padding:.5rem; }
+  .asm-callout { width:18px; height:18px; font-size:.48rem; }
+  .asm-legend { width:100%; min-width:unset; border-left:none; border-top:1px solid rgba(0,0,0,0.07); max-height:260px; overflow-y:auto; }
+
+  /* ── 3D Assembly mobile ── */
+  .asm-3d-scene { transform-origin: center center; width:100vw; height:133vw; max-height:80vh; max-width:100vw; aspect-ratio:unset; }
+  .asm-3d-hud { bottom:.8rem; left:.8rem; font-size:.5rem; }
+  .asm-3d-ctrls { bottom:.8rem; right:.8rem; gap:.3rem; max-width:calc(100vw - 1.6rem); overflow-x:auto; flex-wrap:nowrap; padding-bottom:2px; }
+  .asm-btn { padding:6px 10px; font-size:.5rem; white-space:nowrap; }
+}
+
+@media (max-width: 480px) {
+  /* On very small screens scale down the 3D scene via perspective trick */
+  .asm-3d-wrap { perspective: 700px; }
+  .vmod-box { height:100dvh; border-radius:0; }
+}
+
+/* ═══════ PRINT STYLES ═══════ */
+@media print {
+  /* Hide individual UI sections — NOT body>* which would kill the React root */
+  .hdr, .kente, .fbar, .hero, .layout, .gallery, .guide-section,
+  .vmod-ov, .pm-hdr, .pm-acts, .pm-close { display: none !important; }
+
+  /* Show the print overlay cleanly */
+  .pm-ov { position: static !important; background: white !important;
+            overflow: visible !important; padding: 0 !important; }
+  .pm-box { box-shadow: none !important; border: none !important;
+             max-height: none !important; overflow: visible !important;
+             width: 100% !important; border-radius: 0 !important; }
+  .pm-body { padding: 0 !important; overflow: visible !important; }
+
+  /* Each pattern piece on its own page */
+  .pm-sheet { page-break-after: always; break-after: page;
+               padding: 1cm !important; border: none !important;
+               box-shadow: none !important; }
+
+  /* SKETCH-ONLY: hide the text/notes column, let sketch fill the page */
+  .pm-sheet.sketch-only .pm-text-col, .pm-sheet.sketch-only .pm-slbl, .pm-sheet.sketch-only .pm-stitle, .pm-sheet.sketch-only .pm-foot { display: none !important; }
+  .pm-sheet.sketch-only .pm-inner { display: flex !important; height: 100vh !important; margin: 0 !important; flex-direction: column !important; }
+  .pm-sheet.sketch-only .pm-pat {
+    width: 100% !important; height: 100% !important; display: flex !important;
+    justify-content: center !important; align-items: center !important;
+    background: transparent !important; border: none !important; padding: 0 !important; margin: 0 !important;
+  }
+  .pm-sheet.sketch-only .pm-pat > div:last-child {
+    transform: scale(3.5) !important;
+    transform-origin: center center !important;
+  }
+  .pm-sheet.sketch-only .pm-grid { display: none !important; }
+
+  /* Footer otherwise visible */
+  .pm-foot { display: flex !important; }
 }
 `;
 /* ═══════════════════════════════════════════
@@ -798,120 +870,120 @@ const getAssembledPosition = (shape: PatternShape, index: number): { x: number, 
     let x = 0, y = 0, z = 0, rx = 0, ry = 0, rz = 0, scale = 1, opacity = 1;
 
     switch (shape) {
-        // ── Front torso pieces (z-forward, full opacity)
+        // ── Front torso pieces (curved outwards, fully spatial)
         case "front_bodice": case "buba_front":
-            z = 4; scale = 1.05; opacity = 1; break;
+            z = 45; scale = 1.05; rx = 5; opacity = 1; break;
         case "agbada_outer":
-            z = 8; scale = 1.3; opacity = 0.95; break;
+            z = 58; scale = 1.4; rx = 5; opacity = 0.95; break;
 
-        // ── Back torso (slightly behind, de-saturated)
+        // ── Back torso (curved forming the back)
         case "back_bodice": case "buba_back":
-            z = -4; ry = 180; scale = 1.0; opacity = 0.75; break;
+            z = -40; ry = 180; rx = -8; scale = 1.05; opacity = 0.85; break;
         case "agbada_inner":
-            z = -6; ry = 180; scale = 1.0; opacity = 0.7; break;
+            z = -55; ry = 180; rx = -5; scale = 1.35; opacity = 0.8; break;
 
-        // ── Side panels
+        // ── Side panels (rotated 90deg to bridge front and back)
         case "side_panel":
-            x = index % 2 === 0 ? -10 : 10; z = 2; ry = index % 2 === 0 ? -12 : 12; scale = 0.9; opacity = 0.85; break;
+            x = index % 2 === 0 ? -50 : 50; z = 0; ry = index % 2 === 0 ? -85 : 85; scale = 0.95; opacity = 0.9; break;
 
-        // ── Sleeves
+        // ── Sleeves (tubular sides hanging slightly forward)
         case "sleeve": case "buba_sleeve":
-            x = index % 2 === 0 ? -95 : 95; y = -10; ry = index % 2 === 0 ? -18 : 18; z = 2; scale = 0.95; opacity = 1; break;
+            x = index % 2 === 0 ? -85 : 85; y = -5; ry = index % 2 === 0 ? -80 : 80; rz = index % 2 === 0 ? 10 : -10; rx = -10; z = 10; scale = 1.0; opacity = 1; break;
         case "upper_sleeve":
-            x = index % 2 === 0 ? -90 : 90; y = -8; z = 3; ry = index % 2 === 0 ? -15 : 15; scale = 0.95; opacity = 1; break;
+            x = index % 2 === 0 ? -80 : 80; y = -5; z = 15; ry = index % 2 === 0 ? -70 : 70; rz = index % 2 === 0 ? 8 : -8; rx = -8; scale = 1.0; opacity = 1; break;
         case "under_sleeve":
-            x = index % 2 === 0 ? -88 : 88; y = -6; z = 1; ry = index % 2 === 0 ? -15 : 15; scale = 0.9; opacity = 0.8; break;
+            x = index % 2 === 0 ? -75 : 75; y = -5; z = -10; ry = index % 2 === 0 ? -110 : 110; rz = index % 2 === 0 ? 5 : -5; scale = 0.95; opacity = 0.9; break;
         case "sleeve_cuff":
-            x = index % 2 === 0 ? -100 : 100; y = 80; z = 2; ry = index % 2 === 0 ? -15 : 15; scale = 0.85; opacity = 1; break;
+            x = index % 2 === 0 ? -95 : 95; y = 75; z = 15; ry = index % 2 === 0 ? -80 : 80; rz = index % 2 === 0 ? 10 : -10; rx = -10; scale = 0.9; opacity = 1; break;
 
-        // ── Collar / neckline
+        // ── Collar / neckline (curved dramatically around the neck)
         case "collar": case "top_collar":
-            y = -78; z = 5; rx = -20; scale = 0.9; opacity = 1; break;
+            y = -78; z = 20; rx = -35; scale = 0.9; opacity = 1; break;
         case "undercollar":
-            y = -76; z = 3; rx = -20; scale = 0.88; opacity = 0.75; break;
+            y = -75; z = 18; rx = -30; scale = 0.88; opacity = 0.85; break;
         case "front_facing": case "lapel_facing":
-            y = -30; z = 5; scale = 0.88; opacity = 0.9; break;
+            y = -30; z = 44; rx = 5; scale = 0.88; opacity = 0.95; break;
         case "back_facing":
-            y = -50; z = -3; ry = 180; scale = 0.85; opacity = 0.7; break;
+            y = -45; z = -38; ry = 180; rx = -5; scale = 0.85; opacity = 0.85; break;
         case "placket":
-            y = 0; z = 5; scale = 0.8; opacity = 0.9; break;
+            y = 0; z = 46; rx = 5; scale = 0.8; opacity = 1; break;
 
-        // ── Lower body
+        // ── Lower body (cylindrical trouser legs and flowing skirts)
         case "trouser_front": case "skirt_panel":
-            y = 105; z = 3; x = index % 2 === 0 ? -25 : 25; scale = 1.0; opacity = 1; break;
+            y = 105; z = 25; x = index % 2 === 0 ? -28 : 28; rx = 5; scale = 1.05; opacity = 1; break;
         case "trouser_back":
-            y = 105; z = -3; x = index % 2 === 0 ? -25 : 25; ry = 180; scale = 1.0; opacity = 0.75; break;
+            y = 105; z = -25; x = index % 2 === 0 ? -28 : 28; ry = 180; rx = -5; scale = 1.05; opacity = 0.85; break;
         case "waistband": case "belt":
-            y = 38; z = 6; scale = 1.0; opacity = 1; break;
+            y = 35; z = 28; scale = 1.05; rx = 5; opacity = 1; break;
         case "fly_shield":
-            y = 50; z = 5; scale = 0.85; opacity = 0.9; break;
+            y = 50; z = 27; scale = 0.85; rx = 5; opacity = 0.95; break;
 
-        // ── Pockets & small details
+        // ── Pockets & small details (sitting slightly raised off surface)
         case "pocket": case "pocket_flap":
-            x = index % 2 === 0 ? -28 : 28; y = 20; z = 6; scale = 0.75; opacity = 1; break;
+            x = index % 2 === 0 ? -32 : 32; y = 20; z = 32; rx = 5; ry = index % 2 === 0 ? -5 : 5; scale = 0.75; opacity = 1; break;
         case "pocket_bag":
-            x = index % 2 === 0 ? -28 : 28; y = 22; z = 4; scale = 0.7; opacity = 0.7; break;
+            x = index % 2 === 0 ? -32 : 32; y = 22; z = 30; rx = 5; ry = index % 2 === 0 ? -5 : 5; scale = 0.7; opacity = 0.7; break;
         case "pocket_welt":
-            x = index % 2 === 0 ? -28 : 28; y = 18; z = 6; scale = 0.75; opacity = 0.9; break;
+            x = index % 2 === 0 ? -32 : 32; y = 18; z = 33; rx = 5; ry = index % 2 === 0 ? -5 : 5; scale = 0.75; opacity = 1; break;
 
         // ── Embellishments
         case "embroidery_panel":
-            y = -15; z = 7; scale = 0.8; opacity = 0.95; break;
+            y = -15; z = 47; rx = 5; scale = 0.8; opacity = 1; break;
         case "kente_strip":
-            x = (index % 5) * 18 - 36; y = 0; z = 6; scale = 0.8; opacity = 0.9; break;
+            x = (index % 5) * 18 - 36; y = 0; z = 50; rx = 5; scale = 0.8; opacity = 1; break;
         case "gele_tie":
-            y = -115; z = 2; rx = -5; scale = 1.0; opacity = 1; break;
+            y = -115; z = 15; rx = -20; rz = (index % 2 === 0) ? -10 : 10; scale = 1.1; opacity = 1; break;
         case "wrapper_panel":
-            y = 88; z = 4; rx = 5; scale = 1.05; opacity = 0.95; break;
+            y = 95; z = 30; rx = 8; ry = (index % 2 === 0) ? -5 : 5; scale = 1.1; opacity = 0.95; break;
         case "yoke_back":
-            y = -48; z = -2; ry = 180; scale = 0.9; opacity = 0.7; break;
+            y = -48; z = -42; ry = 180; rx = -10; scale = 0.95; opacity = 0.9; break;
     }
     return { x, y, z, rx, ry, rz, scale, opacity };
 };
 
 // Colour palette for piece legend badges
 const BADGE_COLORS = [
-    "#C14B1A","#D4A017","#2D6A4F","#4A8FD4","#8B0000","#5C3A8A",
-    "#8A2B3D","#3B7A68","#7A3B46","#8A6B4E","#9B1B30","#1A3B8A",
+    "#C14B1A", "#D4A017", "#2D6A4F", "#4A8FD4", "#8B0000", "#5C3A8A",
+    "#8A2B3D", "#3B7A68", "#7A3B46", "#8A6B4E", "#9B1B30", "#1A3B8A",
 ] as const;
 
 // Callout positions mapped to body regions (percentage offsets on the garment illustration)
 const getCalloutPos = (shape: PatternShape, idx: number): { top: string, left: string } => {
     const map: Partial<Record<PatternShape, { top: string, left: string }>> = {
-        front_bodice:    { top: "38%", left: "50%" },
-        buba_front:      { top: "38%", left: "50%" },
-        back_bodice:     { top: "38%", left: "75%" },
-        buba_back:       { top: "38%", left: "75%" },
-        side_panel:      { top: "45%", left: idx % 2 === 0 ? "20%" : "80%" },
-        sleeve:          { top: "45%", left: idx % 2 === 0 ? "15%" : "85%" },
-        buba_sleeve:     { top: "45%", left: idx % 2 === 0 ? "15%" : "85%" },
-        upper_sleeve:    { top: "42%", left: idx % 2 === 0 ? "12%" : "88%" },
-        under_sleeve:    { top: "50%", left: idx % 2 === 0 ? "12%" : "88%" },
-        sleeve_cuff:     { top: "62%", left: idx % 2 === 0 ? "12%" : "88%" },
-        collar:          { top: "18%", left: "50%" },
-        undercollar:     { top: "16%", left: "50%" },
-        top_collar:      { top: "18%", left: "50%" },
-        front_facing:    { top: "28%", left: "38%" },
-        lapel_facing:    { top: "30%", left: "36%" },
-        back_facing:     { top: "22%", left: "68%" },
-        placket:         { top: "32%", left: "50%" },
-        trouser_front:   { top: "72%", left: idx % 2 === 0 ? "38%" : "62%" },
-        trouser_back:    { top: "72%", left: idx % 2 === 0 ? "30%" : "70%" },
-        skirt_panel:     { top: "70%", left: idx % 2 === 0 ? "38%" : "62%" },
-        waistband:       { top: "58%", left: "50%" },
-        belt:            { top: "58%", left: "50%" },
-        fly_shield:      { top: "63%", left: "50%" },
-        pocket:          { top: "48%", left: idx % 2 === 0 ? "32%" : "68%" },
-        pocket_bag:      { top: "50%", left: idx % 2 === 0 ? "30%" : "70%" },
-        pocket_flap:     { top: "46%", left: idx % 2 === 0 ? "32%" : "68%" },
-        pocket_welt:     { top: "44%", left: idx % 2 === 0 ? "32%" : "68%" },
-        embroidery_panel:{ top: "30%", left: "50%" },
-        kente_strip:     { top: "40%", left: `${30 + (idx % 5) * 10}%` },
-        gele_tie:        { top: "8%",  left: "50%" },
-        wrapper_panel:   { top: "75%", left: "50%" },
-        yoke_back:       { top: "25%", left: "72%" },
-        agbada_outer:    { top: "35%", left: "50%" },
-        agbada_inner:    { top: "35%", left: "68%" },
+        front_bodice: { top: "38%", left: "50%" },
+        buba_front: { top: "38%", left: "50%" },
+        back_bodice: { top: "38%", left: "75%" },
+        buba_back: { top: "38%", left: "75%" },
+        side_panel: { top: "45%", left: idx % 2 === 0 ? "20%" : "80%" },
+        sleeve: { top: "45%", left: idx % 2 === 0 ? "15%" : "85%" },
+        buba_sleeve: { top: "45%", left: idx % 2 === 0 ? "15%" : "85%" },
+        upper_sleeve: { top: "42%", left: idx % 2 === 0 ? "12%" : "88%" },
+        under_sleeve: { top: "50%", left: idx % 2 === 0 ? "12%" : "88%" },
+        sleeve_cuff: { top: "62%", left: idx % 2 === 0 ? "12%" : "88%" },
+        collar: { top: "18%", left: "50%" },
+        undercollar: { top: "16%", left: "50%" },
+        top_collar: { top: "18%", left: "50%" },
+        front_facing: { top: "28%", left: "38%" },
+        lapel_facing: { top: "30%", left: "36%" },
+        back_facing: { top: "22%", left: "68%" },
+        placket: { top: "32%", left: "50%" },
+        trouser_front: { top: "72%", left: idx % 2 === 0 ? "38%" : "62%" },
+        trouser_back: { top: "72%", left: idx % 2 === 0 ? "30%" : "70%" },
+        skirt_panel: { top: "70%", left: idx % 2 === 0 ? "38%" : "62%" },
+        waistband: { top: "58%", left: "50%" },
+        belt: { top: "58%", left: "50%" },
+        fly_shield: { top: "63%", left: "50%" },
+        pocket: { top: "48%", left: idx % 2 === 0 ? "32%" : "68%" },
+        pocket_bag: { top: "50%", left: idx % 2 === 0 ? "30%" : "70%" },
+        pocket_flap: { top: "46%", left: idx % 2 === 0 ? "32%" : "68%" },
+        pocket_welt: { top: "44%", left: idx % 2 === 0 ? "32%" : "68%" },
+        embroidery_panel: { top: "30%", left: "50%" },
+        kente_strip: { top: "40%", left: `${30 + (idx % 5) * 10}%` },
+        gele_tie: { top: "8%", left: "50%" },
+        wrapper_panel: { top: "75%", left: "50%" },
+        yoke_back: { top: "25%", left: "72%" },
+        agbada_outer: { top: "35%", left: "50%" },
+        agbada_inner: { top: "35%", left: "68%" },
     };
     return map[shape] ?? { top: `${20 + (idx * 7) % 60}%`, left: `${30 + (idx * 11) % 40}%` };
 };
@@ -1149,43 +1221,106 @@ type FilterLevel = typeof LEVELS[number];
    APP
 ═══════════════════════════════════════════ */
 export default function AtelierApp(): ReactElement {
+    const [theme, setTheme] = useState<"light" | "dark">(() => (localStorage.getItem("atelier-theme") as "light" | "dark") || "light");
     const [cat, setCat] = useState<FilterCat>("All");
     const [region, setRegion] = useState<FilterRegion>("All Regions");
     const [level, setLevel] = useState<FilterLevel>("All Levels");
     const [sel, setSel] = useState<GarmentStyle | null>(null);
     const [openPiece, setOpenPiece] = useState<string | null>(null);
     const [printOpen, setPrintOpen] = useState(false);
+    const [printMode, setPrintMode] = useState<"annotated" | "sketch">("annotated");
     const [tab, setTab] = useState<"gallery" | "guide">("gallery");
     const [modTab, setModTab] = useState<"details" | "asm2d" | "asm3d">("details");
 
-    // 3D Controls
+    useEffect(() => {
+        document.documentElement.classList.toggle("dark", theme === "dark");
+        localStorage.setItem("atelier-theme", theme);
+    }, [theme]);
+
+    // ─── 3D view state ───────────────────────────────────────────
     const [rotX, setRotX] = useState(-15);
     const [rotY, setRotY] = useState(25);
+    const [scale3d, setScale3d] = useState(1);
     const [isDragging, setIsDragging] = useState(false);
-    const [startPos, setStartPos] = useState({ x: 0, y: 0 });
-    // expState: -1 = assembled on body, 0 = flat stack, 1 = normal explode, 2 = max explode
-    const [expState, setExpState] = useState<-1 | 0 | 1 | 2>(-1);
-    const [mat3d, setMat3d] = useState<"paper" | "fabric">("fabric"); // Material toggle
+    const [autoRotate, setAutoRotate] = useState(false);
+    const [hoveredPiece, setHoveredPiece] = useState<string | null>(null);
+
+    // refs used inside the rAF loop — never cause re-renders
+    const rotRef  = useRef({ x: -15, y: 25 });
+    const velRef  = useRef({ x: 0,   y: 0  });
+    const lastRef = useRef({ x: 0,   y: 0  });
+    const dragRef = useRef(false);
+    const rafRef  = useRef<number | null>(null);
+    const autoRef = useRef(false);
+
+    // keep autoRef in sync with state so the rAF loop reads the latest value
+    useEffect(() => { autoRef.current = autoRotate; }, [autoRotate]);
+
+    // inertia + auto-rotate loop
+    useEffect(() => {
+        const tick = () => {
+            if (!dragRef.current) {
+                // friction
+                velRef.current.x *= 0.94;
+                velRef.current.y *= 0.94;
+                // auto-rotate
+                if (autoRef.current && Math.abs(velRef.current.y) < 0.15) {
+                    velRef.current.y = 0.3;
+                }
+                if (Math.abs(velRef.current.x) > 0.01 || Math.abs(velRef.current.y) > 0.01) {
+                    rotRef.current.y += velRef.current.y;
+                    rotRef.current.x  = Math.max(-80, Math.min(80, rotRef.current.x - velRef.current.x));
+                    setRotY(rotRef.current.y);
+                    setRotX(rotRef.current.x);
+                }
+            }
+            rafRef.current = requestAnimationFrame(tick);
+        };
+        rafRef.current = requestAnimationFrame(tick);
+        return () => { if (rafRef.current) cancelAnimationFrame(rafRef.current); };
+    }, []); // run once; inner refs hold live values
 
     const handlePointerDown = (e: React.PointerEvent) => {
+        dragRef.current = true;
         setIsDragging(true);
-        setStartPos({ x: e.clientX, y: e.clientY });
+        lastRef.current  = { x: e.clientX, y: e.clientY };
+        velRef.current   = { x: 0, y: 0 };
         (e.target as HTMLElement).setPointerCapture(e.pointerId);
     };
 
     const handlePointerMove = (e: React.PointerEvent) => {
-        if (!isDragging) return;
-        const dx = e.clientX - startPos.x;
-        const dy = e.clientY - startPos.y;
-        setRotY(prev => prev + dx * 0.5);
-        setRotX(prev => Math.max(-80, Math.min(80, prev - dy * 0.5)));
-        setStartPos({ x: e.clientX, y: e.clientY });
+        if (!dragRef.current) return;
+        const dx = e.clientX - lastRef.current.x;
+        const dy = e.clientY - lastRef.current.y;
+        rotRef.current.y += dx * 0.4;
+        rotRef.current.x  = Math.max(-80, Math.min(80, rotRef.current.x - dy * 0.4));
+        velRef.current = { x: dy * 0.35, y: dx * 0.35 }; // carry velocity into inertia
+        setRotY(rotRef.current.y);
+        setRotX(rotRef.current.x);
+        lastRef.current = { x: e.clientX, y: e.clientY };
     };
 
     const handlePointerUp = (e: React.PointerEvent) => {
+        dragRef.current = false;
         setIsDragging(false);
         (e.target as HTMLElement).releasePointerCapture(e.pointerId);
     };
+
+    const handleWheel = (e: React.WheelEvent) => {
+        e.preventDefault();
+        const factor = e.deltaY > 0 ? 0.92 : 1.09;
+        setScale3d(s => Math.max(0.35, Math.min(2.8, s * factor)));
+    };
+
+    const reset3d = () => {
+        rotRef.current = { x: -15, y: 25 };
+        velRef.current = { x: 0, y: 0 };
+        setRotX(-15); setRotY(25); setScale3d(1); setAutoRotate(false);
+    };
+
+    // expState: -1 = assembled on body, 0 = flat stack, 1 = normal explode, 2 = max explode
+    const [expState, setExpState] = useState<-1 | 0 | 1 | 2>(-1);
+    const [mat3d, setMat3d] = useState<"paper" | "fabric">("fabric"); // Material toggle
 
     const filtered = STYLES.filter(s => {
         if (cat !== "All" && s.category !== cat) return false;
@@ -1233,6 +1368,9 @@ export default function AtelierApp(): ReactElement {
                 <nav className="nav">
                     <button className={tab === "gallery" ? "on" : ""} onClick={() => setTab("gallery")}>Library</button>
                     <button className={tab === "guide" ? "on" : ""} onClick={() => setTab("guide")}>Guide</button>
+                    <button onClick={() => setTheme(t => t === "light" ? "dark" : "light")} style={{ fontSize: '1.2rem', padding: '0 4px' }} title="Toggle Dark Mode">
+                        {theme === "light" ? "☾" : "☀"}
+                    </button>
                 </nav>
             </header>
 
@@ -1395,8 +1533,11 @@ export default function AtelierApp(): ReactElement {
                                                 const pos = getCalloutPos(p.shape, i);
                                                 const color = BADGE_COLORS[i % BADGE_COLORS.length];
                                                 return (
-                                                    <div key={p.id} className="asm-callout"
+                                                    <div key={p.id}
+                                                        className={`asm-callout${hoveredPiece === p.id ? " hi" : ""}`}
                                                         title={p.name}
+                                                        onMouseEnter={() => setHoveredPiece(p.id)}
+                                                        onMouseLeave={() => setHoveredPiece(null)}
                                                         style={{ background: color, top: pos.top, left: pos.left, transform: 'translate(-50%,-50%)' }}>
                                                         {i + 1}
                                                     </div>
@@ -1414,7 +1555,10 @@ export default function AtelierApp(): ReactElement {
                                         {sel.pieces.map((p, i) => {
                                             const color = BADGE_COLORS[i % BADGE_COLORS.length];
                                             return (
-                                                <div key={p.id} className="asm-leg-item">
+                                                <div key={p.id}
+                                                    className={`asm-leg-item${hoveredPiece === p.id ? " hi" : ""}`}
+                                                    onMouseEnter={() => setHoveredPiece(p.id)}
+                                                    onMouseLeave={() => setHoveredPiece(null)}>
                                                     <div className="asm-leg-badge" style={{ background: color }}>{i + 1}</div>
                                                     <div className="asm-leg-info">
                                                         <div className="asm-leg-name">{p.name}</div>
@@ -1431,8 +1575,13 @@ export default function AtelierApp(): ReactElement {
                             )}
 
                             {modTab === "asm3d" && (
-                                <div className="asm-3d-wrap" onPointerDown={handlePointerDown} onPointerMove={handlePointerMove} onPointerUp={handlePointerUp}>
-                                    <div className="asm-3d-scene" style={{ transform: `rotateX(${rotX}deg) rotateY(${rotY}deg)` }}>
+                                <div className="asm-3d-wrap"
+                                    style={{ cursor: isDragging ? 'grabbing' : 'grab' }}
+                                    onPointerDown={handlePointerDown}
+                                    onPointerMove={handlePointerMove}
+                                    onPointerUp={handlePointerUp}
+                                    onWheel={handleWheel}>
+                                    <div className="asm-3d-scene" style={{ transform: `rotateX(${rotX}deg) rotateY(${rotY}deg) scale(${scale3d})` }}>
 
                                         {/* Ground plane grid */}
                                         <div style={{ position: 'absolute', top: '50%', left: '50%', width: 500, height: 500, transform: 'translate(-50%,-50%) rotateX(90deg)', pointerEvents: 'none' }}>
@@ -1538,8 +1687,9 @@ export default function AtelierApp(): ReactElement {
                                     </div>
 
                                     <div className="asm-3d-hud">
-                                        {expState === -1 ? "Assembled Outfit" : expState === 0 ? "Flat Stack" : "Exploded View"} · {sel.pieces.length} Pieces<br />
-                                        <span style={{ color: 'var(--gold)' }}>Drag to Rotate</span>
+                                        {expState === -1 ? "👗 Assembled Outfit" : expState === 0 ? "📦 Flat Stack" : "💥 Exploded View"} · {sel.pieces.length} Pieces<br />
+                                        <span style={{ color: 'var(--gold)' }}>Drag · Scroll to Zoom</span>
+                                        {autoRotate && <span style={{ color: 'rgba(212,160,23,0.7)', marginLeft: '0.8rem' }}>▶ Auto-Rotating</span>}
                                     </div>
 
                                     <div className="asm-3d-ctrls">
@@ -1547,8 +1697,9 @@ export default function AtelierApp(): ReactElement {
                                         <button className={`asm-btn${expState === 0 ? " active" : ""}`} onClick={(e) => { e.stopPropagation(); setExpState(0); }}>Flat Stack</button>
                                         <button className={`asm-btn${expState === 1 ? " active" : ""}`} onClick={(e) => { e.stopPropagation(); setExpState(1); }}>Explode</button>
                                         <button className={`asm-btn${expState === 2 ? " active" : ""}`} onClick={(e) => { e.stopPropagation(); setExpState(2); }}>Max Explode</button>
+                                        <button className={`asm-btn${autoRotate ? " active" : ""}`} onClick={(e) => { e.stopPropagation(); setAutoRotate(r => !r); }}>{autoRotate ? "⏹ Stop" : "▶ Auto"}</button>
                                         <button className="asm-btn" onClick={(e) => { e.stopPropagation(); setMat3d(m => m === "paper" ? "fabric" : "paper"); }} style={{ borderColor: 'var(--gold)', background: 'rgba(212,160,23,0.2)' }}>Fabric: {mat3d.toUpperCase()}</button>
-                                        <button className="asm-btn" onClick={(e) => { e.stopPropagation(); setRotX(-15); setRotY(25); }}>Reset</button>
+                                        <button className="asm-btn" onClick={(e) => { e.stopPropagation(); reset3d(); }}>Reset</button>
                                     </div>
                                 </div>
                             )}
@@ -1572,15 +1723,15 @@ export default function AtelierApp(): ReactElement {
                                     Fabric Requirements: {sel.fabric}
                                 </div>
                                 {sel.pieces.map((p, idx) => (
-                                    <div key={p.id} className="pm-sheet">
+                                    <div key={p.id} className={`pm-sheet${printMode === "sketch" ? " sketch-only" : ""}`}>
                                         <div className="pm-slbl">Sheet {idx + 1} of {sel.pieces.length}</div>
-                                        <div className="pm-stitle">{p.name}</div>
+                                        <div className="pm-stitle">{printMode === "sketch" ? p.name : p.name}</div>
                                         <div className="pm-inner">
                                             <div className="pm-pat">
                                                 <div className="pm-grid" />
                                                 <div style={{ position: "relative", zIndex: 2, transform: "scale(1.3)", transformOrigin: "top left" }}><PatSVG shape={p.shape} /></div>
                                             </div>
-                                            <div style={{ flex: 1, minWidth: 250 }}>
+                                            <div className="pm-text-col" style={{ flex: 1, minWidth: 250 }}>
                                                 <div className="nlbl">Notes</div>
                                                 <ul className="nlist">{p.notes.map(n => <li key={n}>{n}</li>)}</ul>
                                                 <div className="slbl">Instructions</div>
@@ -1595,7 +1746,8 @@ export default function AtelierApp(): ReactElement {
                                 ))}
                                 <div className="pm-acts">
                                     <button className="bact out" onClick={() => setPrintOpen(false)}>Cancel</button>
-                                    <button className="bact sol" onClick={() => window.print()}>Print to A4</button>
+                                    <button className="bact out" onClick={() => { setPrintMode("sketch"); setTimeout(() => window.print(), 100); }} style={{ borderColor: 'var(--gold)', color: 'var(--gold)' }}>🖨 Sketches Only</button>
+                                    <button className="bact sol" onClick={() => { setPrintMode("annotated"); setTimeout(() => window.print(), 100); }}>🖨 Full Pattern (A4)</button>
                                 </div>
                             </div>
                         </div>
